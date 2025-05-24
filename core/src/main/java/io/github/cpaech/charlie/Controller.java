@@ -10,6 +10,15 @@ public class Controller {
         // Update the game state based on user input and other factors
         // For example, move paddles, update ball position, check for collisions, etc.
         // This is where the game logic would go
+        // Verhalten im Unendlichen des Balles
+        if (model.ball.x < 0) {
+            model.scoreB++; // player B scores a point
+            resetBall();    // Ball zurücksetzen
+        }
+        if (model.ball.x > 800) {
+            model.scoreA++; // player A scores a point
+            resetBall();    // Ball zurücksetzen
+        }
     }
     public void dispose() {
         // Dispose of any resources that need to be cleaned up
@@ -25,5 +34,9 @@ public class Controller {
         model.ScoreA = 0;
         model.ScoreB = 0;
     }
-
+    private void resetBall() {
+        // Set the ball to the center of the screen and reset its velocity after a point is scored or the ball goes out of bounds
+        model.ball.setPosition(400, 300);  // x,y Ball in die Mitte setzen
+        model.ballVelocity.set(200, 200);  // Ballgeschwindigkeit zurücksetzen
+    }
 }

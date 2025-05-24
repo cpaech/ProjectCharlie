@@ -9,16 +9,25 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-
+    private Model model;
+    private View view;
+    private Controller controller;
     @Override
     public void create() {
+        // Initializes the model, view, and controller
+        model = new Model();
+        view = new View(model);
+        controller = new Controller(model, view);
     }
 
     @Override
     public void render() {
+        controller.update();
+        view.render();
     }
 
     @Override
     public void dispose() {
+        view.dispose();
     }
 }
