@@ -2,6 +2,7 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,12 +18,12 @@ public class Main extends ApplicationAdapter {
         // Initializes the model, view, and controller
         model = new Model();
         view = new View(model);
-        controller = new Controller(model, view);
+        controller = new Controller(model);
     }
 
     @Override
     public void render() {
-        controller.update();
+        controller.render(Gdx.graphics.getDeltaTime());
         view.render();
     }
 
