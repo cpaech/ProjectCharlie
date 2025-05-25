@@ -21,19 +21,19 @@ public class Controller {
         }
         // keeps the ball updated based on the delta time and the current velocity
         // Delta is the time since the last frame, used for smooth movement
-        model.ballVelocity.x = model.ballVelocity.x * delta;
-        model.ballVelocity.y = model.ballVelocity.y * delta;
+        model.ball.x = model.ball.x * delta;
+        model.ball.y = model.ball.y * delta;
 
         // Collision with Paddle A
         if (model.ball.overlaps(model.paddleA)) {
-            model.ballVelocity.x *= -1; // x-Richtung umkehren
-            model.ballVelocity.y *= -1; // y-Richtung umkehren
+            model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
+            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
         }
 
         // Collision with Paddle B
         if (model.ball.overlaps(model.paddleB)) {
-            model.ballVelocity.x *= -1; // x-Richtung umkehren
-            model.ballVelocity.y *= -1; // y-Richtung umkehren
+            model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
+            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
         }
 
         // Collision with Decke/Boden (Spielfeldgrenzen)
