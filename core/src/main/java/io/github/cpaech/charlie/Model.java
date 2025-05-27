@@ -11,10 +11,4 @@ public class Model {
     public Vector2 ballVelocity = new Vector2();
     public int scoreA = 0;
     public int scoreB = 0;
-
-    public Model() {
-        ball.x = 20;
-        ball.y = 30;
-        paddleA.set(0, 250, 20, 100);
-    }
 }

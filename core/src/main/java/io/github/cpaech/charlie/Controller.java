@@ -7,6 +7,7 @@ public class Controller {
    
     public Controller(Model model) {
         this.model = model;
+        modelwerteInitialisieren();
     }
     public void render(float delta) {
         // Update the game state based on user input and other factors
@@ -35,6 +36,7 @@ public class Controller {
         model.ball.setPosition(400.0f, 300.0f);
         model.scoreA = 0;
         model.scoreA = 0;
+
     }
     private void resetBall() {
         // Set the ball to the center of the screen and reset its velocity after a point is scored or the ball goes out of bounds
