@@ -36,13 +36,11 @@ public class Controller {
         // Collision with Paddle A
         if (model.ball.overlaps(model.paddleA)) {
             model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
-            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
         }
 
         // Collision with Paddle B
         if (model.ball.overlaps(model.paddleB)) {
             model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
-            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
         }
 
         // Collision with Decke/Boden (Spielfeldgrenzen)
