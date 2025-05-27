@@ -15,6 +15,7 @@ public class Model {
     public Model() {
         ball.x = 20;
         ball.y = 30;
-        paddleA.set(0, 250, 20, 100);
+        paddleA.set(20, 200, 20, 100);
+        paddleB.set(760, 200, 20, 100);
     }
 }
