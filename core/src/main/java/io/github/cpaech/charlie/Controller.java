@@ -21,28 +21,6 @@ public class Controller {
             model.scoreA++; // player A scores a point
             resetBall();    // Ball zurücksetzen
         }
-        // keeps the ball updated based on the delta time and the current velocity
-        // Delta is the time since the last frame, used for smooth movement
-        model.ball.x = model.ball.x * delta;
-        model.ball.y = model.ball.y * delta;
-
-        // Collision with Paddle A
-        if (model.ball.overlaps(model.paddleA)) {
-            model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
-            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
-        }
-
-        // Collision with Paddle B
-        if (model.ball.overlaps(model.paddleB)) {
-            model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
-            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
-        }
-
-        // Collision with Decke/Boden (Spielfeldgrenzen)
-        if (model.ball.y <= 0 || model.ball.y + model.ball.height >= 600) { // || steht für ODER, eins von beidem muss wahr sein
-        // Wenn der Ball die obere oder untere Grenze des Spielfelds berührt, kehre die y-Richtung um
-            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
-        }
     }
     public void dispose() {
         // Dispose of any resources that need to be cleaned up
@@ -61,6 +39,6 @@ public class Controller {
     private void resetBall() {
         // Set the ball to the center of the screen and reset its velocity after a point is scored or the ball goes out of bounds
         model.ball.setPosition(400, 300);  // x,y Ball in die Mitte setzen
-        model.ballVelocity.set(100, 100);  // Ballgeschwindigkeit zurücksetzen
+        model.ballVelocity.set(200, 200);  // Ballgeschwindigkeit zurücksetzen
     }
 }
