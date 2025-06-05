@@ -36,40 +36,38 @@ Note that most tasks that are not specific to a single project can be run with `
 For example, `core:clean` removes `build` folder only from the `core` project.
 
 ## Class diagram
-config:
-theme: redux
-look: classic
-layout: elk
 
+
+```mermaid
 classDiagram
 Model <|-- Main
 View <|-- Main
 Controller <|-- Main
 Model <|-- View
 Model <|-- Controller
-
 class Model {
-        positions
-        speeds
-    }
+    positions
+    speeds
+}
 class Controller {
-        initializeModelVariables()
-        render()
-        collisionChecks()
-        moveBall()
-        getPaddleKeyInput()
-        resetBallIfOutOfBounds()
-    }
+    initializeModelVariables()
+    render()
+    collisionChecks()
+    moveBall()
+    getPaddleKeyInput()
+    resetBallIfOutOfBounds()
+}
 class View {
-        spriteBatch
-        font
-        paddleTexture
-        ballTexture
-        render()
-        dispose()
-    }
+    spriteBatch
+    font
+    paddleTexture
+    ballTexture
+    render()
+    dispose()
+}
 class Main {
-        create()
-        render()
-        dispose()
-    }
+    create()
+    render()
+    dispose()
+}
+```
