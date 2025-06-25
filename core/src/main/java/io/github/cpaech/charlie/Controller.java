@@ -2,6 +2,7 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Vector2;
 
 public class Controller {
     public Model model;
@@ -16,9 +17,7 @@ public class Controller {
         // This is where the game logic would go
         // Verhalten im Unendlichen des Balles
 
-        inputHandling(); // Eingaben verarbeiten
-
-        if (model.ball.x < 0) {
+        if (model.ball.x + model.ball.width< 0) { // +width, damit der Ball komplett aus dem Spielfeld ist
             model.scoreB++; // player B scores a point
             resetBall();    // Ball zurücksetzen
         }
@@ -27,7 +26,7 @@ public class Controller {
             resetBall();    // Ball zurücksetzen
         }
 
-        
+        Vector2 tempBallPosition = new Vector2(model.ball.x, model.ball.y); // Position des Balls diesen Render speichern, um ihn bei Kollisionen zurückzusetzen. In model auslagern?
         // keeps the ball updated based on the delta time and the current velocity
         // Delta is the time since the last frame, used for smooth movement
         model.ball.x += model.ballVelocity.x * delta; // Ball in x-Richtung bewegen
@@ -35,18 +34,41 @@ public class Controller {
 
         // Collision with Paddle A
         if (model.ball.overlaps(model.paddleA)) {
-            model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
+            model.ballVelocity.x *= -1.0f;                                      // x-Richtung umkehren
+            model.ball.setPosition(tempBallPosition.x, tempBallPosition.y);     // ball zurücksetzen, da es sein kann, das durch unterschiedliche delta-Werte der Ball nach der nächsten Ballbewegung immernoch im Paddle wäre
+            if(model.ball.overlaps(model.paddleA)){                             // der Ball kann nun immernoch im Paddle sein, wenn man mit dem Paddle in den Ball hinein fährt und Ballgeschwindigkeit.y<Paddlegeschwindigkeit
+                if(model.ball.y < model.paddleA.y + model.paddleA.height / 2){  // Fallunterscheidung; ist man von oben/unten mit dem Paddle auf den Ball gefahren
+                    model.ball.y = model.paddleA.y - model.ball.height;         // da dies nur eintreten kann, wenn der Ball zu kleine Geschwindigkeit.y hat um selbst aus dem Paddle auszutreten/in das Paddle hinein fährt, schieben wir den Ball vor dem Paddle her
+                }else{
+                    model.ball.y = model.paddleA.y + model.paddleA.height;
+                }
+            model.ballVelocity.x *= -1.0f;
+            model.ball.x += model.ballVelocity.x * delta;                       // falls wir den Ball schieben müssen, bewegt er sich ungehindert in die x-Richtung weiter
+            }
         }
 
         // Collision with Paddle B
         if (model.ball.overlaps(model.paddleB)) {
             model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
+            model.ball.setPosition(tempBallPosition.x, tempBallPosition.y);
+            if(model.ball.overlaps(model.paddleB)){ // siehe Paddle A
+                if(model.ball.y < model.paddleB.y + model.paddleB.height / 2){
+                    model.ball.y = model.paddleB.y - model.ball.height;
+                }else{
+                    model.ball.y = model.paddleB.y + model.paddleB.height;
+                }
+            model.ballVelocity.x *= -1.0f;
+            model.ball.x += model.ballVelocity.x * delta;
+            }
         }
+
+        inputHandling(); // Eingaben verarbeiten
 
         // Collision with Decke/Boden (Spielfeldgrenzen)
         if (model.ball.y <= 0 || model.ball.y + model.ball.height >= 600) { // || steht für ODER, eins von beidem muss wahr sein
         // Wenn der Ball die obere oder untere Grenze des Spielfelds berührt, kehre die y-Richtung um
             model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
+            model.ball.setY(tempBallPosition.y); // Ball zurücksetzen, damit er bei unterschiedliche delta-Werten nicht in der Wand bleibt
         }
     }
     public void dispose() {
