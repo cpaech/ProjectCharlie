@@ -21,7 +21,7 @@ public class Controller {
             model.scoreB++; // player B scores a point
             resetBall();    // Ball zurücksetzen
         }
-        if (model.ball.x > 800) {
+        if (model.ball.x > model.screenWidth) {
             model.scoreA++; // player A scores a point
             resetBall();    // Ball zurücksetzen
         }
@@ -65,7 +65,7 @@ public class Controller {
         inputHandling(); // Eingaben verarbeiten
 
         // Collision with Decke/Boden (Spielfeldgrenzen)
-        if (model.ball.y <= 0 || model.ball.y + model.ball.height >= 600) { // || steht für ODER, eins von beidem muss wahr sein
+        if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) { // || steht für ODER, eins von beidem muss wahr sein
         // Wenn der Ball die obere oder untere Grenze des Spielfelds berührt, kehre die y-Richtung um
             model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
             model.ball.setY(tempBallPosition.y); // Ball zurücksetzen, damit er bei unterschiedliche delta-Werten nicht in der Wand bleibt
@@ -76,10 +76,10 @@ public class Controller {
         // For example, textures, sounds, etc.
     }
     public void modelwerteInitialisieren(){
-        model.paddleA.setSize(20, 100);
-        model.paddleB.setSize(20, 100);
-        model.paddleA.setPosition(0.0f, 600.0f / 2.0f - (model.paddleA.height / 2.0f));
-        model.paddleB.setPosition(800.0f - (model.paddleB.width), 600.0f / 2.0f - (model.paddleB.height / 2.0f));
+        model.paddleA.setSize(model.paddleWidth, model.PaddleHeight);
+        model.paddleB.setSize(model.paddleWidth, model.PaddleHeight);
+        model.paddleA.setPosition(0.0f, model.screenHeight / 2.0f - (model.paddleA.height / 2.0f));
+        model.paddleB.setPosition(model.screenWidth - (model.paddleB.width), model.screenHeight / 2.0f - (model.paddleB.height / 2.0f));
         model.ball.setSize(20, 20);
         model.scoreA = 0;
         model.scoreB = 0;
@@ -87,7 +87,7 @@ public class Controller {
     }
     private void resetBall() {
         // Set the ball to the center of the screen and reset its velocity after a point is scored or the ball goes out of bounds
-        model.ball.setPosition(400, 300);  // x,y Ball in die Mitte setzen
+        model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);  // x,y Ball in die Mitte setzen
         model.ballVelocity.set((float)(((int)(Math.random() * 2)) * 2 - 1) * 200.0f, (float)(((int)(Math.random() * 2)) * 2 - 1) * 200.0f + (float)Math.random() * 100.0f - 50.0f);  // Ballgeschwindigkeit zurücksetzen
     }
 
@@ -106,14 +106,14 @@ public class Controller {
         if (model.paddleA.y < 0) {
             model.paddleA.y = 0; // Paddle A nicht unter den Bildschirm bewegen
         }
-        if (model.paddleA.y + model.paddleA.height > 600) {
+        if (model.paddleA.y + model.paddleA.height > model.screenHeight) {
             model.paddleA.y = 600 - model.paddleA.height; // Paddle A nicht über den Bildschirm bewegen
         }
         if (model.paddleB.y < 0) {
             model.paddleB.y = 0; // Paddle B nicht unter den Bildschirm bewegen
         }
-        if (model.paddleB.y + model.paddleB.height > 600) {
-            model.paddleB.y = 600 - model.paddleB.height; // Paddle B nicht über den Bildschirm bewegen
+        if (model.paddleB.y + model.paddleB.height > model.screenHeight) {
+            model.paddleB.y = model.screenHeight - model.paddleB.height; // Paddle B nicht über den Bildschirm bewegen
         }
     }
 }
