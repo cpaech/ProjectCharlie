@@ -31,8 +31,8 @@ public class View {
     }
   
     public void render() {
-        //clear the screen with one color
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        //clear the screen with the color from the model
+        ScreenUtils.clear(model.backgroundColor[0], model.backgroundColor[1], model.backgroundColor[2], model.backgroundColor[3]);
       
         //begin drawing for the current frame
         batch.begin();
