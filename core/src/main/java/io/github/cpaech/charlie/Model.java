@@ -13,4 +13,5 @@ public class Model {
     public Vector2 ballVelocity = new Vector2();
     public int scoreA = 0;
     public int scoreB = 0;
+    public int paddleSpeed = 300; // Geschwindigkeit der Paddles in Pixel pro Sekunde
 }
