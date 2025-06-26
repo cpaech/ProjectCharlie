@@ -38,7 +38,7 @@ public class View {
         batch.begin();
         batch.draw(paddleTexture, model.paddleB.x , model.paddleB.y, model.paddleB.width, model.paddleB.height);
         batch.draw(paddleTexture, model.paddleA.x, model.paddleA.y, model.paddleA.width, model.paddleA.height);
-        font.draw(batch, model.scoreA + " : " + model.scoreB, 400, 560);
+        font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight-40);
         batch.draw(ballTexture, model.ball.x, model.ball.y, model.ball.width, model.ball.height);
       
         // end drawing
