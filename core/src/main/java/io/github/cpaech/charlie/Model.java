@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 
 
 public class Model {
+    public int screenWidth = 800;
+    public int screenHeight = 600; // are set in the lwjgl3 launcher at line 30; "setWindowedMode( 800, 600);". Dynamic resizing is possible but unnecary for this game.
     public Rectangle paddleA = new Rectangle();
     public Rectangle paddleB = new Rectangle();
     public Rectangle ball = new Rectangle();
