@@ -9,6 +9,8 @@ public class Model {
     public int screenHeight = 600; // are set in the lwjgl3 launcher at line 30; "setWindowedMode( 800, 600);". Dynamic resizing is possible but unnecary for this game.
     public Rectangle paddleA = new Rectangle();
     public Rectangle paddleB = new Rectangle();
+    public int paddleHeight = 100;
+    public int paddlewidth = 20;
     public Rectangle ball = new Rectangle();
     public Vector2 ballVelocity = new Vector2();
     public int scoreA = 0;
