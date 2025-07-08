@@ -10,7 +10,7 @@ public class Model {
     public Rectangle paddleA = new Rectangle();
     public Rectangle paddleB = new Rectangle();
     public int paddleHeight = 100;
-    public int paddlewidth = 20;
+    public int paddleWidth = 20;
     public Rectangle ball = new Rectangle();
     public Vector2 ballVelocity = new Vector2();
     public int scoreA = 0;
