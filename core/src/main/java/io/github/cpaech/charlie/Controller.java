@@ -54,8 +54,8 @@ public class Controller {
         // For example, textures, sounds, etc.
     }
     public void modelwerteInitialisieren(){
-        model.paddleA.setSize(model.paddleWidth, model.PaddleHeight);
-        model.paddleB.setSize(model.paddleWidth, model.PaddleHeight);
+        model.paddleA.setSize(model.paddleWidth, model.paddleHeight);
+        model.paddleB.setSize(model.paddleWidth, model.paddleHeight);
         model.paddleA.setPosition(0.0f, model.screenHeight / 2.0f - (model.paddleA.height / 2.0f));
         model.paddleB.setPosition(model.screenWidth - (model.paddleB.width), model.screenHeight / 2.0f - (model.paddleB.height / 2.0f));
         model.ball.setSize(20, 20);
