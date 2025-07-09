@@ -18,5 +18,6 @@ public class Model {
     public int paddleSpeed = 300; // Geschwindigkeit der Paddles in Pixel pro Sekunde
     public float initialBallSpeed = 300.0f;
     public float randomBallSpeed = 100.0f;
+    public int ballSize = 20;
     public float[] backgroundColor = {0.15f, 0.15f, 0.2f, 1f};
 }
