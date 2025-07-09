@@ -76,8 +76,8 @@ public class Controller {
         // For example, textures, sounds, etc.
     }
     public void modelwerteInitialisieren(){
-        model.paddleA.setSize(20, 100);
-        model.paddleB.setSize(20, 100);
+        model.paddleA.setSize(model.paddleWidth, model.paddleHeight);
+        model.paddleB.setSize(model.paddleWidth, model.paddleHeight);
         model.paddleA.setPosition(0.0f, model.screenHeight / 2.0f - (model.paddleA.height / 2.0f));
         model.paddleB.setPosition(model.screenWidth - (model.paddleB.width), model.screenHeight / 2.0f - (model.paddleB.height / 2.0f));
         model.ball.setSize(20, 20);
@@ -106,14 +106,14 @@ public class Controller {
         if (model.paddleA.y < 0) {
             model.paddleA.y = 0; // Paddle A nicht unter den Bildschirm bewegen
         }
-        if (model.paddleA.y + model.paddleA.height > 600) {
+        if (model.paddleA.y + model.paddleA.height > model.screenHeight) {
             model.paddleA.y = 600 - model.paddleA.height; // Paddle A nicht über den Bildschirm bewegen
         }
         if (model.paddleB.y < 0) {
             model.paddleB.y = 0; // Paddle B nicht unter den Bildschirm bewegen
         }
-        if (model.paddleB.y + model.paddleB.height > 600) {
-            model.paddleB.y = 600 - model.paddleB.height; // Paddle B nicht über den Bildschirm bewegen
+        if (model.paddleB.y + model.paddleB.height > model.screenHeight) {
+            model.paddleB.y = model.screenHeight - model.paddleB.height; // Paddle B nicht über den Bildschirm bewegen
         }
     }
 }
