@@ -88,7 +88,7 @@ public class Controller {
     private void resetBall() {
         // Set the ball to the center of the screen and reset its velocity after a point is scored or the ball goes out of bounds
         model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);  // x,y Ball in die Mitte setzen
-        model.ballVelocity.set(model.initialBallSpeed + Math.random() * model.randomBallSpeed, model.initialBallSpeed + Math.random() * model.randomBallSpeed);  // Ballgeschwindigkeit zurücksetzen
+        model.ballVelocity.set(model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed, model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed);  // Ballgeschwindigkeit zurücksetzen
     }
 
     public void inputHandling()
