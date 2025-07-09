@@ -80,7 +80,7 @@ public class Controller {
         model.paddleB.setSize(model.paddleWidth, model.paddleHeight);
         model.paddleA.setPosition(0.0f, model.screenHeight / 2.0f - (model.paddleA.height / 2.0f));
         model.paddleB.setPosition(model.screenWidth - (model.paddleB.width), model.screenHeight / 2.0f - (model.paddleB.height / 2.0f));
-        model.ball.setSize(20, 20);
+        model.ball.setSize(model.ballSize, model.ballSize);
         model.scoreA = 0;
         model.scoreB = 0;
         resetBall(); // Ball zurücksetzen
