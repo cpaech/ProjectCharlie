@@ -88,7 +88,7 @@ public class Controller {
     private void resetBall() {
         // Set the ball to the center of the screen and reset its velocity after a point is scored or the ball goes out of bounds
         model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);  // x,y Ball in die Mitte setzen
-        model.ballVelocity.set((float)(((int)(Math.random() * 2)) * 2 - 1) * 200.0f, (float)(((int)(Math.random() * 2)) * 2 - 1) * 200.0f + (float)Math.random() * 100.0f - 50.0f);  // Ballgeschwindigkeit zurücksetzen
+        model.ballVelocity.set(model.initialBallSpeed + Math.random() * model.randomBallSpeed, model.initialBallSpeed + Math.random() * model.randomBallSpeed);  // Ballgeschwindigkeit zurücksetzen
     }
 
     public void inputHandling()
@@ -107,7 +107,7 @@ public class Controller {
             model.paddleA.y = 0; // Paddle A nicht unter den Bildschirm bewegen
         }
         if (model.paddleA.y + model.paddleA.height > model.screenHeight) {
-            model.paddleA.y = 600 - model.paddleA.height; // Paddle A nicht über den Bildschirm bewegen
+            model.paddleA.y = model.screenHeight - model.paddleA.height; // Paddle A nicht über den Bildschirm bewegen
         }
         if (model.paddleB.y < 0) {
             model.paddleB.y = 0; // Paddle B nicht unter den Bildschirm bewegen
