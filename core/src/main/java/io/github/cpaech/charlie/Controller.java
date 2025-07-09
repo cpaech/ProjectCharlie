@@ -107,7 +107,7 @@ public class Controller {
             model.paddleA.y = 0; // Paddle A nicht unter den Bildschirm bewegen
         }
         if (model.paddleA.y + model.paddleA.height > model.screenHeight) {
-            model.paddleA.y = 600 - model.paddleA.height; // Paddle A nicht über den Bildschirm bewegen
+            model.paddleA.y = model.screenHeight - model.paddleA.height; // Paddle A nicht über den Bildschirm bewegen
         }
         if (model.paddleB.y < 0) {
             model.paddleB.y = 0; // Paddle B nicht unter den Bildschirm bewegen
