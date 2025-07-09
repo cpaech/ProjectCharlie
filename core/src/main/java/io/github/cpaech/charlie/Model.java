@@ -6,43 +6,43 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Model {
     /**
-    * Is set in the lwjgl3 launcher at line 30; "setWindowedMode( 800, 600);". Dynamic resizing is possible but unnecessary for this game.
+    * Width of the game window in pixels.
     */
     public int screenWidth = 800;
     /**
-    * Is set in the lwjgl3 launcher at line 30; "setWindowedMode( 800, 600);". Dynamic resizing is possible but unnecessary for this game.
+    * Height of the game window in pixels.
     */
     public int screenHeight = 600;
     /**
-    * Implements paddle A as a rectangle.
+    * Rectangle represents paddle of player A.
     */
     public Rectangle paddleA = new Rectangle();
     /**
-    * Implements paddle B as a rectangle.
+    * Rectangle represents paddle of player B
     */
     public Rectangle paddleB = new Rectangle();
     /**
-    * Sets the paddle height of both paddles.
+    * Height of both paddles in pixels.
     */
     public int paddleHeight = 100; 
     /**
-    * Sets the paddle width of both paddles.
+    * Width of both paddles in pixels.
     */
     public int paddleWidth = 20;
     /**
-    * Implements the ball as a rectangle.
+    * Rectangle represents the ball.
     */
     public Rectangle ball = new Rectangle();
     /**
-    * Implements paddle B as a rectangle.
+    * Velocity of the ball as a 2D vector.
     */
     public Vector2 ballVelocity = new Vector2();
     /**
-    * Implements a score for player A and sets it to 0.
+    * Score counter for player A.
     */
     public int scoreA = 0;
     /**
-    * Implements a score for player B and sets it to 0.
+    * Score counter for player B.
     */
     public int scoreB = 0;
     /**
@@ -50,7 +50,7 @@ public class Model {
     */
     public int paddleSpeed = 300;
     /**
-    * Sets the color of the background.
+    * Background color of the game screen as a float array.
     */
     public float[] backgroundColor = {0.15f, 0.15f, 0.2f, 1f};
 }
