@@ -13,6 +13,7 @@ public class Model {
     public Vector2 ballVelocity = new Vector2();
     public int scoreA = 0;
     public int scoreB = 0;
+    Vector2 tempBallPosition = new Vector2(0, 0); // Hier wird die Position des Balls bevor der Bewegung peichern, um diese bei einer Kollisionen zurückzusetzen.
     public int paddleSpeed = 300; // Geschwindigkeit der Paddles in Pixel pro Sekunde
     public float[] backgroundColor = {0.15f, 0.15f, 0.2f, 1f};
 }

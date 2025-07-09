@@ -3,6 +3,7 @@ package io.github.cpaech.charlie;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Controller {
     public Model model;
@@ -26,55 +27,61 @@ public class Controller {
             resetBall();    // Ball zurücksetzen
         }
 
-        Vector2 tempBallPosition = new Vector2(model.ball.x, model.ball.y); // Position des Balls diesen Render speichern, um ihn bei Kollisionen zurückzusetzen. In model auslagern?
+        model.tempBallPosition.set(model.ball.x, model.ball.y); // Speichern der Ballposition vor der Bewegung, um sie bei Kollisionen zurückzusetzen
         // keeps the ball updated based on the delta time and the current velocity
         // Delta is the time since the last frame, used for smooth movement
         model.ball.x += model.ballVelocity.x * delta; // Ball in x-Richtung bewegen
         model.ball.y += model.ballVelocity.y * delta; // Ball in y-Richtung bewegen
 
         // Collision with Paddle A
-        if (model.ball.overlaps(model.paddleA)) {
-            model.ballVelocity.x *= -1.0f;                                      // x-Richtung umkehren
-            model.ball.setPosition(tempBallPosition.x, tempBallPosition.y);     // ball zurücksetzen, da es sein kann, das durch unterschiedliche delta-Werte der Ball nach der nächsten Ballbewegung immernoch im Paddle wäre
-            if(model.ball.overlaps(model.paddleA)){                             // der Ball kann nun immernoch im Paddle sein, wenn man mit dem Paddle in den Ball hinein fährt und Ballgeschwindigkeit.y<Paddlegeschwindigkeit
-                if(model.ball.y < model.paddleA.y + model.paddleA.height / 2){  // Fallunterscheidung; ist man von oben/unten mit dem Paddle auf den Ball gefahren
-                    model.ball.y = model.paddleA.y - model.ball.height;         // da dies nur eintreten kann, wenn der Ball zu kleine Geschwindigkeit.y hat um selbst aus dem Paddle auszutreten/in das Paddle hinein fährt, schieben wir den Ball vor dem Paddle her
-                }else{
-                    model.ball.y = model.paddleA.y + model.paddleA.height;
-                }
-            model.ballVelocity.x *= -1.0f;
-            model.ball.x += model.ballVelocity.x * delta;                       // falls wir den Ball schieben müssen, bewegt er sich ungehindert in die x-Richtung weiter
-            }
-        }
-
+        ballCollisionWithPaddle(model.paddleA);
         // Collision with Paddle B
-        if (model.ball.overlaps(model.paddleB)) {
-            model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
-            model.ball.setPosition(tempBallPosition.x, tempBallPosition.y);
-            if(model.ball.overlaps(model.paddleB)){ // siehe Paddle A
-                if(model.ball.y < model.paddleB.y + model.paddleB.height / 2){
-                    model.ball.y = model.paddleB.y - model.ball.height;
-                }else{
-                    model.ball.y = model.paddleB.y + model.paddleB.height;
-                }
-            model.ballVelocity.x *= -1.0f;
-            model.ball.x += model.ballVelocity.x * delta;
-            }
-        }
+        ballCollisionWithPaddle(model.paddleB);
 
         inputHandling(); // Eingaben verarbeiten
+
+        isPaddleNowOverBall(model.paddleA, delta);  // nachdem die Paddles bewegt wurden, prüfen ob der Ball im Paddle ist und ggf. die Ballposition und Geschwindigkeit anpassen
+        isPaddleNowOverBall(model.paddleB, delta);
 
         // Collision with Decke/Boden (Spielfeldgrenzen)
         if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) { // || steht für ODER, eins von beidem muss wahr sein
         // Wenn der Ball die obere oder untere Grenze des Spielfelds berührt, kehre die y-Richtung um
             model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
-            model.ball.setY(tempBallPosition.y); // Ball zurücksetzen, damit er bei unterschiedliche delta-Werten nicht in der Wand bleibt
+            model.ball.setY(model.tempBallPosition.y); // Ball zurücksetzen, damit er bei unterschiedliche delta-Werten nicht in der Wand bleibt
         }
     }
     public void dispose() {
         // Dispose of any resources that need to be cleaned up
         // For example, textures, sounds, etc.
     }
+
+    public void isPaddleNowOverBall(Rectangle paddle, float delta) {
+        if(model.ball.overlaps(paddle)){                             // der Ball kann nun immernoch im Paddle sein, wenn man mit dem Paddle in den Ball hinein fährt und Ballgeschwindigkeit.y<Paddlegeschwindigkeit
+            if(model.ball.y < paddle.y + paddle.height / 2){         // Fallunterscheidung; ist man von oben/unten mit dem Paddle auf den Ball gefahren
+                model.ball.y = paddle.y - model.ball.height;         // da dies nur eintreten kann, wenn der Ball zu kleine Geschwindigkeit.y hat um selbst aus dem Paddle auszutreten/in das Paddle hinein fährt, schieben wir den Ball vor dem Paddle her
+                if(model.ballVelocity.y < 0.0f){                     // wenn der Ball auf die Untere Hälfte des Paddles trifft und sich nach unten bewegt, muss die Umdrehung der y-Richtung aus ballCollisionWithPaddle() rückgängig gemacht werden. Genauso für den Fall das der Ball auf die obere Hälfte des Paddles trifft und sich nach oben bewegt
+                    model.ballVelocity.y = -model.ballVelocity.y;
+                }
+            }else{
+                model.ball.y = paddle.y + paddle.height;
+                if(model.ballVelocity.y < 0.0f){
+                    model.ballVelocity.y = -model.ballVelocity.y;
+                }
+            }
+        }
+    }
+
+    public void ballCollisionWithPaddle(Rectangle paddle){
+        if (model.ball.overlaps(paddle) && paddle.y < model.tempBallPosition.y + model.ball.height / 2 && paddle.y + paddle.height > model.ball.y - model.ball.height / 2) { // Überprüfen, ob der Ball das Paddle berührt und ob der Ball sich in der Höhe des Paddles befindet. / 2 damit dieser Kollisionsfall nicht in extremfällen eintritt die bei einer niedrigen Renderrate Visuell sehr unwahrscheinlich erscheinen
+            model.ballVelocity.x *= -1.0f;                // x-Richtung umkehren
+            model.ball.x = model.tempBallPosition.x;      // ball zurücksetzen, da es sein kann, das durch unterschiedliche delta-Werte der Ball nach der nächsten Ballbewegung immernoch im Paddle wäre
+            }
+        else if (model.ball.overlaps(paddle)){           // Überprüfen, ob der Ball das Paddle berührt (nun kann dies nurnoch der Fall sein, wenn der Ball sich außerhalb der Höhe des Paddles befindet). Wie die Paddlebewegung (falls das Paddle sich bewegt) damit interagiert ist in der Methode isPaddleNowOverBall() geregelt
+            model.ballVelocity.y *= -1.0f;               // y-Richtung umkehren
+            model.ball.y = model.tempBallPosition.y;     // ball zurücksetzen, da es sein kann, das durch unterschiedliche delta-Werte der Ball nach der nächsten Ballbewegung immernoch im Paddle wäre
+        }
+    }
+
     public void modelwerteInitialisieren(){
         model.paddleA.setSize(20, 100);
         model.paddleB.setSize(20, 100);
@@ -117,3 +124,4 @@ public class Controller {
         }
     }
 }
+
