@@ -46,26 +46,35 @@ Controller <|-- Main
 Model <|-- View
 Model <|-- Controller
 class Model {
-    positions
-    speeds
+    screenWidth: int
+    screenHeight: int
+    paddleA: Rectangle
+    paddleB: Rectangle
+    paddleHeight: int
+    paddleWidth: int
+    ball: Rectangle
+    ballVelocity: Vector2
+    scoreA: int
+    scoreB: int
+    paddleSpeed: int
+    backgroundColor: float[4]
 }
 class Controller {
-    initializeModelVariables()
-    render()
-    collisionChecks()
-    moveBall()
-    getPaddleKeyInput()
-    resetBallIfOutOfBounds()
+    model: Model
+    modelwerteInitialisieren()
+    render(float delta)
+    resetBall()
+    inputHandling()
 }
 class View {
-    spriteBatch
-    font
-    paddleTexture
-    ballTexture
+    model: Model
     render()
     dispose()
 }
 class Main {
+    model: Model
+    view: View
+    controller: Controller
     create()
     render()
     dispose()
