@@ -11,6 +11,7 @@ public class Model {
     public Rectangle paddleB = new Rectangle();
     public Rectangle ball = new Rectangle();
     public Vector2 ballVelocity = new Vector2();
+    public int lastCollidedPaddle = 0; //0 = none; 1 = paddle A, 2 = paddle B; this is used to determine which paddle was last hit by the ball, so that the ball can be moved back to its position before the collision if it hits the paddle again.
     public int scoreA = 0;
     public int scoreB = 0;
     Vector2 tempBallPosition = new Vector2(0, 0); // Hier wird die Position des Balls bevor der Bewegung peichern, um diese bei einer Kollisionen zurückzusetzen.
