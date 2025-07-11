@@ -61,10 +61,6 @@ public class Model {
     */
     Vector2 tempBallPosition = new Vector2(0, 0);
     /**
-    * Speed of the paddles in pixel per second.
-    */
-    public int paddleSpeed = 300;
-    /**
     * Background color of the game screen as a float array.
     */
     public float[] backgroundColor = {0.15f, 0.15f, 0.2f, 1f};
