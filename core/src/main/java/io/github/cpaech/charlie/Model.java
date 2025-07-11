@@ -3,7 +3,11 @@ package io.github.cpaech.charlie;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-
+/**
+ * This is the model part of the MVC - structure.
+ * It stores all sorts of variables important to the game, ranging from
+ * hardcoded ones to continously changing ones, like paddles positions or speed.
+ */
 public class Model {
     /**
     * Width of the game window in pixels.
