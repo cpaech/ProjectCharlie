@@ -53,4 +53,20 @@ public class Model {
     * Background color of the game screen as a float array.
     */
     public float[] backgroundColor = {0.15f, 0.15f, 0.2f, 1f};
+    /**
+    * Basespeed of the paddle
+    */
+    public int paddleSpeed = 300;
+    /**
+    * Initial base speed of the ball
+    */
+    public float initialBallSpeed = 300.0f;
+    /**
+    * Maximum random speed added to the base speed of the ball
+    */
+    public float randomBallSpeed = 100.0f;
+    /**
+    * Squaresize of the Ball in px
+    */
+    public int ballSize = 20;
 }
