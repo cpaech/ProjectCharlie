@@ -90,11 +90,11 @@ public class Controller {
      * For example paddle size or position
      */
     public void modelwerteInitialisieren(){
-        model.paddleA.setSize(20, 100);
-        model.paddleB.setSize(20, 100);
+        model.paddleA.setSize(model.paddleWidth, model.paddleHeight);
+        model.paddleB.setSize(model.paddleWidth, model.paddleHeight);
         model.paddleA.setPosition(0.0f, model.screenHeight / 2.0f - (model.paddleA.height / 2.0f));
         model.paddleB.setPosition(model.screenWidth - (model.paddleB.width), model.screenHeight / 2.0f - (model.paddleB.height / 2.0f));
-        model.ball.setSize(20, 20);
+        model.ball.setSize(model.ballSize, model.ballSize);
         model.scoreA = 0;
         model.scoreB = 0;
         resetBall();
@@ -107,7 +107,7 @@ public class Controller {
     private void resetBall() {
         model.lastCollidedPaddle = 0;
         model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);
-        model.ballVelocity.set((float)(((int)(Math.random() * 2)) * 2 - 1) * 200.0f, (float)(((int)(Math.random() * 2)) * 2 - 1) * 200.0f + (float)Math.random() * 100.0f - 50.0f); 
+        model.ballVelocity.set(model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed, model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed);
     }
 
     /**
@@ -128,14 +128,14 @@ public class Controller {
         if (model.paddleA.y < 0) {
             model.paddleA.y = 0;
         }
-        if (model.paddleA.y + model.paddleA.height > 600) {
-            model.paddleA.y = 600 - model.paddleA.height;
+        if (model.paddleA.y + model.paddleA.height > model.screenHeight) {
+            model.paddleA.y = model.screenHeight - model.paddleA.height;
         }
         if (model.paddleB.y < 0) {
             model.paddleB.y = 0;
         }
-        if (model.paddleB.y + model.paddleB.height > 600) {
-            model.paddleB.y = 600 - model.paddleB.height;
+        if (model.paddleB.y + model.paddleB.height > model.screenHeight) {
+            model.paddleB.y = model.screenHeight - model.paddleB.height;
         }
     }
 }
