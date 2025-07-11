@@ -2,46 +2,67 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+/**
+ * The View is the part responsible for drawing all sorts of graphics to the screen.
+ */
 public class View {
+
     /**
-     * SpriteBatch is used to draw our Geometry on the screen (e.g. paddles, balls, etc.).
-     * 
-     * Usually a sprite batch is used to draw many textures of the same type (e.g. many paddles)
-     * at once by collecting the geometry and then submitting it to the GPU in one go.
-     * However, in this case we will use it to draw just two paddles and a single ball.
+     * SpriteBatch is used to draw our Geometry on the screen (e.g. paddles, balls, etc.)
      */
     private final SpriteBatch batch;
-    private final Texture paddleTexture;   //texture object for the paddle.
-    private final Texture ballTexture;    //texture object for the ball.
-    BitmapFont font;    //font for the Scoredisplay.
 
-    private Model model; //the View only needs a reference to the Model to get the current state of the game.
-    //later a refernce to the controller might be needed to handle user input from buttons (difficult because circular refernce).
+    /**
+     * Texture allocated for the paddles
+     */
+    private final Texture paddleTexture;
+    
+    /**
+     * Texture allocated for the ball
+     */
+    private final Texture ballTexture;
 
+    /**
+     * A simple/standard bitmap font used to draw the the score
+     */
+    private BitmapFont font;
+
+    /**
+     * Reference to the model. This reference is used to fetch values needed in order to draw
+     * graphics to the screen.
+     */
+    private Model model; 
+
+    /**
+     * This loads and allocates all required graphical ressources.
+     * @param model Reference to the model by Main
+     */
     public View(Model model) {
-        batch = new SpriteBatch(); //SpriteBatch. Necessary to draw things to the screen
         this.model = model;
+
+        batch = new SpriteBatch(); 
         paddleTexture = new Texture("libgdx.png");
         ballTexture = new Texture("ball.png");
-        font = new BitmapFont(); //a default font of 15pt
+        font = new BitmapFont();
     }
-  
+    
+    /**
+     * This method gets called every frame to redraw the screen with all its elements.
+     */
     public void render() {
-        //clear the screen with the color from the model
         ScreenUtils.clear(model.backgroundColor[0], model.backgroundColor[1], model.backgroundColor[2], model.backgroundColor[3]);
       
-        //begin drawing for the current frame
         batch.begin();
+        
         batch.draw(paddleTexture, model.paddleB.x , model.paddleB.y, model.paddleB.width, model.paddleB.height);
         batch.draw(paddleTexture, model.paddleA.x, model.paddleA.y, model.paddleA.width, model.paddleA.height);
-        font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight-40);
         batch.draw(ballTexture, model.ball.x, model.ball.y, model.ball.width, model.ball.height);
+
+        font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight-40);
       
-        // end drawing
         batch.end();
     }
 
@@ -53,4 +74,5 @@ public class View {
         ballTexture.dispose();
         batch.dispose();
     }
+    
 }
