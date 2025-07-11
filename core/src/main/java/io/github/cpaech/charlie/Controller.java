@@ -2,9 +2,6 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Rectangle;
-
 
 /**
  * This is the Controller. It updates the gameStates and values 
@@ -15,12 +12,11 @@ public class Controller {
     /**
      * Reference to the global model
      */
-    public Model model;
+    private Model model;
    
     /**
      * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller
      * @param model Reference to the global model
-     * 
     */
     public Controller(Model model) {
         this.model = model;
@@ -34,12 +30,11 @@ public class Controller {
     * @param delta This is the time in seconds since the last call to this method
     */
     public void render(float delta) {
-        
         if (model.ball.x + model.ball.width < 0) { //check right side of ball against left wall of playingfield
             model.scoreB++;
             resetBall();
         }
-        if (model.ball.x > model.screenWidth) {
+        if (model.ball.x > model.screenWidth) { //check left side of ball against right wall of playingfield
             model.scoreA++;
             resetBall();
         }
@@ -58,19 +53,7 @@ public class Controller {
             model.ballVelocity.x *= -1.0f; 
         }
 
-        inputHandling(); //PaddleMovement
-
-        //Collisionchecks if the Paddle moved into the Ball
-        if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
-            model.lastCollidedPaddle = 1; // Paddle A is now lastCollidedPaddle
-            model.ballVelocity.x *= -1.0f; 
-            model.ball.x = model.paddleA.x + model.paddleA.width; //Move in front of Paddle
-        }
-        else if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) {
-            model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
-            model.ballVelocity.x *= -1.0f; 
-            model.ball.x = model.paddleB.x - model.ball.width; // Move in front of Paddle
-        }
+        inputHandling(); //PaddleMovement and Collisioncheck
 
         // Collision with top and bottom
         if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
@@ -89,14 +72,17 @@ public class Controller {
      * This initializes values of the model
      * For example paddle size or position
      */
-    public void modelwerteInitialisieren(){
+    public void modelwerteInitialisieren() {
         model.paddleA.setSize(model.paddleWidth, model.paddleHeight);
         model.paddleB.setSize(model.paddleWidth, model.paddleHeight);
         model.paddleA.setPosition(0.0f, model.screenHeight / 2.0f - (model.paddleA.height / 2.0f));
         model.paddleB.setPosition(model.screenWidth - (model.paddleB.width), model.screenHeight / 2.0f - (model.paddleB.height / 2.0f));
+        
         model.ball.setSize(model.ballSize, model.ballSize);
+        
         model.scoreA = 0;
         model.scoreB = 0;
+        
         resetBall();
     }
 
@@ -137,6 +123,19 @@ public class Controller {
         if (model.paddleB.y + model.paddleB.height > model.screenHeight) {
             model.paddleB.y = model.screenHeight - model.paddleB.height;
         }
+
+        //Collisionchecks if the Paddle moved into the Ball
+        if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
+            model.lastCollidedPaddle = 1; // Paddle A is now lastCollidedPaddle
+            model.ballVelocity.x *= -1.0f; 
+            model.ball.x = model.paddleA.x + model.paddleA.width; //Move in front of Paddle
+        }
+        else if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) {
+            model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
+            model.ballVelocity.x *= -1.0f; 
+            model.ball.x = model.paddleB.x - model.ball.width; // Move in front of Paddle
+        }
     }
+    
 }
 
