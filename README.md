@@ -34,3 +34,49 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+## Class diagram
+
+
+```mermaid
+classDiagram
+Model <|-- Main
+View <|-- Main
+Controller <|-- Main
+Model <|-- View
+Model <|-- Controller
+class Model {
+    screenWidth: int
+    screenHeight: int
+    paddleA: Rectangle
+    paddleB: Rectangle
+    paddleHeight: int
+    paddleWidth: int
+    ball: Rectangle
+    ballVelocity: Vector2
+    scoreA: int
+    scoreB: int
+    paddleSpeed: int
+    backgroundColor: float[4]
+}
+class Controller {
+    model: Model
+    modelwerteInitialisieren()
+    render(float delta)
+    resetBall()
+    inputHandling()
+}
+class View {
+    model: Model
+    render()
+    dispose()
+}
+class Main {
+    model: Model
+    view: View
+    controller: Controller
+    create()
+    render()
+    dispose()
+}
+```
