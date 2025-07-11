@@ -3,78 +3,92 @@ package io.github.cpaech.charlie;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Rectangle;
 
+
+/**
+ * This is the Controller. It updates the gameStates and values 
+ * and is responsible for the game logic
+ */
 public class Controller {
+
+    /**
+     * Reference to the global model
+     */
     public Model model;
    
+    /**
+     * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller
+     * @param model Reference to the global model
+     * 
+    */
     public Controller(Model model) {
         this.model = model;
         modelwerteInitialisieren();
     }
-    public void render(float delta) {
-        // Update the game state based on user input and other factors
-        // For example, move paddles, update ball position, check for collisions, etc.
-        // This is where the game logic would go
-        // Verhalten im Unendlichen des Balles
 
-        if (model.ball.x + model.ball.width< 0) { // +width, damit der Ball komplett aus dem Spielfeld ist
-            model.scoreB++; // player B scores a point
-            resetBall();    // Ball zurücksetzen
+    /**
+    * Update the game state based on user input and other factors
+    * For example, move paddles, update ball position, check for collisions, etc.
+    * This is where the game logic would go
+    * @param delta This is the time in seconds since the last call to this method
+    */
+    public void render(float delta) {
+        
+        if (model.ball.x + model.ball.width < 0) { //check right side of ball against left wall of playingfield
+            model.scoreB++;
+            resetBall();
         }
         if (model.ball.x > model.screenWidth) {
-            model.scoreA++; // player A scores a point
-            resetBall();    // Ball zurücksetzen
+            model.scoreA++;
+            resetBall();
         }
 
-        Vector2 tempBallPosition = new Vector2(model.ball.x, model.ball.y); // Position des Balls diesen Render speichern, um ihn bei Kollisionen zurückzusetzen. In model auslagern?
-        // keeps the ball updated based on the delta time and the current velocity
-        // Delta is the time since the last frame, used for smooth movement
-        model.ball.x += model.ballVelocity.x * delta; // Ball in x-Richtung bewegen
-        model.ball.y += model.ballVelocity.y * delta; // Ball in y-Richtung bewegen
+        model.tempBallPosition.set(model.ball.x, model.ball.y); 
+        
+        model.ball.x += model.ballVelocity.x * delta;
+        model.ball.y += model.ballVelocity.y * delta;
 
-        // Collision with Paddle A
-        if (model.ball.overlaps(model.paddleA)) {
-            model.ballVelocity.x *= -1.0f;                                      // x-Richtung umkehren
-            model.ball.setPosition(tempBallPosition.x, tempBallPosition.y);     // ball zurücksetzen, da es sein kann, das durch unterschiedliche delta-Werte der Ball nach der nächsten Ballbewegung immernoch im Paddle wäre
-            if(model.ball.overlaps(model.paddleA)){                             // der Ball kann nun immernoch im Paddle sein, wenn man mit dem Paddle in den Ball hinein fährt und Ballgeschwindigkeit.y<Paddlegeschwindigkeit
-                if(model.ball.y < model.paddleA.y + model.paddleA.height / 2){  // Fallunterscheidung; ist man von oben/unten mit dem Paddle auf den Ball gefahren
-                    model.ball.y = model.paddleA.y - model.ball.height;         // da dies nur eintreten kann, wenn der Ball zu kleine Geschwindigkeit.y hat um selbst aus dem Paddle auszutreten/in das Paddle hinein fährt, schieben wir den Ball vor dem Paddle her
-                }else{
-                    model.ball.y = model.paddleA.y + model.paddleA.height;
-                }
-            model.ballVelocity.x *= -1.0f;
-            model.ball.x += model.ballVelocity.x * delta;                       // falls wir den Ball schieben müssen, bewegt er sich ungehindert in die x-Richtung weiter
-            }
+        if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
+            model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
+            model.ballVelocity.x *= -1.0f; 
+        }
+        if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
+            model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
+            model.ballVelocity.x *= -1.0f; 
         }
 
-        // Collision with Paddle B
-        if (model.ball.overlaps(model.paddleB)) {
-            model.ballVelocity.x *= -1.0f; // x-Richtung umkehren
-            model.ball.setPosition(tempBallPosition.x, tempBallPosition.y);
-            if(model.ball.overlaps(model.paddleB)){ // siehe Paddle A
-                if(model.ball.y < model.paddleB.y + model.paddleB.height / 2){
-                    model.ball.y = model.paddleB.y - model.ball.height;
-                }else{
-                    model.ball.y = model.paddleB.y + model.paddleB.height;
-                }
-            model.ballVelocity.x *= -1.0f;
-            model.ball.x += model.ballVelocity.x * delta;
-            }
+        inputHandling(); //PaddleMovement
+
+        //Collisionchecks if the Paddle moved into the Ball
+        if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
+            model.lastCollidedPaddle = 1; // Paddle A is now lastCollidedPaddle
+            model.ballVelocity.x *= -1.0f; 
+            model.ball.x = model.paddleA.x + model.paddleA.width; //Move in front of Paddle
+        }
+        else if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) {
+            model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
+            model.ballVelocity.x *= -1.0f; 
+            model.ball.x = model.paddleB.x - model.ball.width; // Move in front of Paddle
         }
 
-        inputHandling(); // Eingaben verarbeiten
-
-        // Collision with Decke/Boden (Spielfeldgrenzen)
-        if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) { // || steht für ODER, eins von beidem muss wahr sein
-        // Wenn der Ball die obere oder untere Grenze des Spielfelds berührt, kehre die y-Richtung um
+        // Collision with top and bottom
+        if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
             model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
-            model.ball.setY(tempBallPosition.y); // Ball zurücksetzen, damit er bei unterschiedliche delta-Werten nicht in der Wand bleibt
+            model.ball.setY(model.tempBallPosition.y); 
         }
     }
+
+    /**
+     * This method disposes of any allocated ressources like textures of fonts
+     */
     public void dispose() {
-        // Dispose of any resources that need to be cleaned up
-        // For example, textures, sounds, etc.
     }
+
+    /**
+     * This initializes values of the model
+     * For example paddle size or position
+     */
     public void modelwerteInitialisieren(){
         model.paddleA.setSize(model.paddleWidth, model.paddleHeight);
         model.paddleB.setSize(model.paddleWidth, model.paddleHeight);
@@ -83,14 +97,22 @@ public class Controller {
         model.ball.setSize(model.ballSize, model.ballSize);
         model.scoreA = 0;
         model.scoreB = 0;
-        resetBall(); // Ball zurücksetzen
-    }
-    private void resetBall() {
-        // Set the ball to the center of the screen and reset its velocity after a point is scored or the ball goes out of bounds
-        model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);  // x,y Ball in die Mitte setzen
-        model.ballVelocity.set(model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed, model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed);  // Ballgeschwindigkeit zurücksetzen
+        resetBall();
     }
 
+    /**
+     * This resets the Ball to the middle of the screen
+     * and assigns it a random velocity
+     */
+    private void resetBall() {
+        model.lastCollidedPaddle = 0;
+        model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);
+        model.ballVelocity.set(model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed, model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed);
+    }
+
+    /**
+     * This moves the paddles up or down, based on userinput
+     */
     public void inputHandling()
     {
         boolean isPressedW = Gdx.input.isKeyPressed(Keys.W);
@@ -98,22 +120,23 @@ public class Controller {
         boolean isPressedUp = Gdx.input.isKeyPressed(Keys.UP);
         boolean isPressedDown = Gdx.input.isKeyPressed(Keys.DOWN);
         
-        model.paddleA.y += (isPressedW ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); // Paddle A nach oben bewegen
-        model.paddleA.y -= (isPressedS ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); // Paddle A nach unten bewegen
-        model.paddleB.y += (isPressedUp ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); // Paddle B nach oben bewegen
-        model.paddleB.y -= (isPressedDown ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); // Paddle B nach unten bewegen
-        // Ensure paddles stay within the bounds of the screen
+        model.paddleA.y += (isPressedW ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime();
+        model.paddleA.y -= (isPressedS ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); 
+        model.paddleB.y += (isPressedUp ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); 
+        model.paddleB.y -= (isPressedDown ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime();
+        
         if (model.paddleA.y < 0) {
-            model.paddleA.y = 0; // Paddle A nicht unter den Bildschirm bewegen
+            model.paddleA.y = 0;
         }
         if (model.paddleA.y + model.paddleA.height > model.screenHeight) {
-            model.paddleA.y = model.screenHeight - model.paddleA.height; // Paddle A nicht über den Bildschirm bewegen
+            model.paddleA.y = model.screenHeight - model.paddleA.height;
         }
         if (model.paddleB.y < 0) {
-            model.paddleB.y = 0; // Paddle B nicht unter den Bildschirm bewegen
+            model.paddleB.y = 0;
         }
         if (model.paddleB.y + model.paddleB.height > model.screenHeight) {
-            model.paddleB.y = model.screenHeight - model.paddleB.height; // Paddle B nicht über den Bildschirm bewegen
+            model.paddleB.y = model.screenHeight - model.paddleB.height;
         }
     }
 }
+

@@ -42,6 +42,13 @@ public class Model {
     */
     public Vector2 ballVelocity = new Vector2();
     /**
+    * The paddle the ball last collided with. This is used to avoid any further collisions with the same paddle, after the ball has already changed direction.
+    * 0 = none
+    * 1 = PaddleA
+    * 2 = PaddleB
+    */
+    public int lastCollidedPaddle = 0; //0 = none; 1 = paddle A, 2 = paddle
+    /**
     * Score counter for player A.
     */
     public int scoreA = 0;
@@ -50,9 +57,9 @@ public class Model {
     */
     public int scoreB = 0;
     /**
-    * Speed of the paddles in pixel per second.
+    * Temporary position of the ball, prior to a collision check. Used to revert the position if necessary to avoid buggy behaviour caused by changing update rates.
     */
-    public int paddleSpeed = 300;
+    Vector2 tempBallPosition = new Vector2(0, 0);
     /**
     * Background color of the game screen as a float array.
     */
