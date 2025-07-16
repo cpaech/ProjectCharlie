@@ -38,15 +38,15 @@ public class MenuView {
     private Stage stage;
 
     //I won't do a Javadoc for each and everyone of them ;(
-    private TextButton loginPlayer1Button;
-    private TextButton loginPlayer2Button;
+    public TextButton loginPlayer1Button;
+    public TextButton loginPlayer2Button;
 
-    private TextField player1NameField;
-    private TextField player2NameField;
+    public TextField player1NameField;
+    public TextField player2NameField;
 
-    private TextButton startGameButton;
+    public TextButton startGameButton;
 
-    private Label errorLabel;
+    public Label errorLabel;
 
     /**
      * as a background for the textfield
@@ -181,7 +181,7 @@ public class MenuView {
     {
         stage.draw();
     }
-    
+
     /**
      * Clear all memory and cleanup
      */
