@@ -34,35 +34,56 @@ public class View {
      * Reference to the model. This reference is used to fetch values needed in order to draw
      * graphics to the screen.
      */
-    private Model model; 
+    private Model model;  
+    Controller mvcController;
+
+    MenuView menuView;
 
     /**
-     * This loads and allocates all required graphical ressources.
      * @param model Reference to the model by Main
+     * @param mvcController Controller passed by {@link Main}
      */
+
     public View(Model model) {
         this.model = model;
+        menuView = new MenuView(model);
 
         batch = new SpriteBatch(); 
         paddleTexture = new Texture("libgdx.png");
         ballTexture = new Texture("ball.png");
         font = new BitmapFont();
     }
+
+    public void setController(Controller mvcController) {
+        this.mvcController = mvcController;
+        menuView.setController(mvcController);
+    }
     
     /**
      * This method gets called every frame to redraw the screen with all its elements.
      */
     public void render() {
-        ScreenUtils.clear(model.backgroundColor[0], model.backgroundColor[1], model.backgroundColor[2], model.backgroundColor[3]);
-      
+        // clear the screen with one color
+        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        // begin drawing
         batch.begin();
-        
-        batch.draw(paddleTexture, model.paddleB.x , model.paddleB.y, model.paddleB.width, model.paddleB.height);
-        batch.draw(paddleTexture, model.paddleA.x, model.paddleA.y, model.paddleA.width, model.paddleA.height);
-        batch.draw(ballTexture, model.ball.x, model.ball.y, model.ball.width, model.ball.height);
-
-        font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight-40);
-      
+        // wether to draw the home menu or game screen
+        if (model.homeMenuVisible) {
+            menuView.render(batch);
+        } 
+        else {
+            batch.draw(paddleTexture, model.paddleB.x, model.paddleB.y, model.paddleB.width,
+                    model.paddleB.height);
+            batch.draw(paddleTexture, model.paddleA.x, model.paddleA.y, model.paddleA.width,
+                    model.paddleA.height);
+            font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight - 20);
+            font.draw(batch,"" + model.player1Name, 10, model.screenHeight - 40);
+            font.draw(batch, "Highscore: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name), 10, 540);
+            font.draw(batch,"" + model.player2Name, model.screenWidth - model.player2Name.length()*9 - 10, model.screenHeight - 20);
+            font.draw(batch, "Highscore: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name), model.screenWidth - 90, model.screenHeight - 40);
+            batch.draw(ballTexture, model.ball.x, model.ball.y, model.ball.width, model.ball.height);
+        }
+        // end drawing
         batch.end();
     }
 
