@@ -5,24 +5,23 @@ import com.badlogic.gdx.Preferences;
 
 
 public class AppPreferences {
-    public static final String PREFS_NAME = "charlie";
+    public static final String PREFS_NAME = "PreferencesForProjectCharlie";
     private static AppPreferences appPreferences = null;
 
     public static AppPreferences getAppPreferences() {
         if (appPreferences == null) {
-            AppPreferences.appPreferences = new AppPreferences(); //object does the persistent saving for us and is cross-platform compatible
+            AppPreferences.appPreferences = new AppPreferences();           //object does the persistent saving for us and is cross-platform compatible
         }
-        // Ensure that the singleton instance is returned
-        return AppPreferences.appPreferences;
+        return AppPreferences.appPreferences;                               // Ensure that the singleton instance is returned
     }
 
-    protected Preferences getPrefs() { // method to acess our Preferences object after it has been created
+    protected Preferences getPrefs() {                                      // method to acess our Preferences object after it has been created
 	    return Gdx.app.getPreferences(PREFS_NAME);
     }
 
-    public void setPlayerHighScore(String playerName, int score) { // Set the high score for a playerName
+    public void setPlayerHighScore(String playerName, int score) {          // Set the high score for a playerName
         getPrefs().putInteger(playerName + ".highscore", score);
-        getPrefs().flush(); // needed to safe the preferences
+        getPrefs().flush();                                                 // needed to safe the preferences
     }
 
     public int getPlayerHighScore(String playerName) {
