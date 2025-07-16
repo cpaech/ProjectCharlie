@@ -47,10 +47,18 @@ public class Controller {
         if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
             model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
             model.ballVelocity.x *= -1.0f; 
+            float differenceToPaddleMiddle = ((float)model.ball.y + 0.5f * (float)model.ball.height) - ((float)model.paddleA.y + 0.5f * (float)model.paddleA.height);
+            if (differenceToPaddleMiddle > 55.0f || differenceToPaddleMiddle < -55.0f) {
+                model.ballVelocity.x += 10.0f;;
+            }
         }
         if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
             model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
             model.ballVelocity.x *= -1.0f; 
+            float differenceToPaddleMiddle = ((float)model.ball.y + 0.5f * (float)model.ball.height) - ((float)model.paddleB.y + 0.5f * (float)model.paddleB.height);
+            if (differenceToPaddleMiddle > 55.0f || differenceToPaddleMiddle < -55.0f) {
+                model.ballVelocity.x -= 10.0f;;
+            }
         }
 
         inputHandling(); //PaddleMovement and Collisioncheck

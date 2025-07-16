@@ -64,6 +64,11 @@ public class Model {
     public int scoreA = 0;
 
     /**
+     * Tint color of the ball (red value)
+     */
+    public float ballTintColorR = 0.0f;
+
+    /**
     * Score counter for player B.
     */
     public int scoreB = 0;

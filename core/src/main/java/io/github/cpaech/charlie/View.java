@@ -54,7 +54,7 @@ public class View {
      */
     public void render() {
         ScreenUtils.clear(model.backgroundColor[0], model.backgroundColor[1], model.backgroundColor[2], model.backgroundColor[3]);
-      
+        
         batch.begin();
         
         batch.draw(paddleTexture, model.paddleB.x , model.paddleB.y, model.paddleB.width, model.paddleB.height);
