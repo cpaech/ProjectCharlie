@@ -20,4 +20,6 @@ public class Model {
     public float randomBallSpeed = 100.0f;
     public int ballSize = 20;
     public float[] backgroundColor = {0.15f, 0.15f, 0.2f, 1f};
+    public String player1Name; // store the players name for this session, is set in the menu
+    public String player2Name; // store the players name for this session, is set in the menu
 }

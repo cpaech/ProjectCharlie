@@ -10,10 +10,15 @@ public class Main extends ApplicationAdapter {
     private Controller controller;
     @Override
     public void create() {
+        loadPreferences();
         // Initializes the model, view, and controller
         model = new Model();
         view = new View(model);
         controller = new Controller(model);
+    }
+
+    private void loadPreferences() {    
+        AppPreferences.getAppPreferences();
     }
 
     @Override

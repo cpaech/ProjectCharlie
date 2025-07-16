@@ -60,6 +60,12 @@ public class Controller {
             model.ballVelocity.x *= -1.0f;
             model.ball.x += model.ballVelocity.x * delta;
             }
+            if (model.scoreA > AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name)) {
+                AppPreferences.getAppPreferences().setPlayerHighScore(model.player1Name, model.scoreA);
+            }
+            if (model.scoreB > AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name)) {
+                AppPreferences.getAppPreferences().setPlayerHighScore(model.player2Name, model.scoreB);
+            }
         }
 
         inputHandling(); // Eingaben verarbeiten
