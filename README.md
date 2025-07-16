@@ -6,9 +6,14 @@
 Dieses Projekt wurde von Constantin, Finn, David und Jakob erstellt, mit dem Ziel sich der Softwareentwicklung und deren Prozesse zu nähern.
 Besonders wurde dabei auf die Zusammenarbeit im Team und die Prozesse im Hintergrund geachtet, welche einen reibungslosen Ablauf ermöglichen.
 Deshalb handelt es sich bei diesem Spiel um ein sehr einfaches und klassisches Spiel, nämlich Pong.
-> Das 1972 von Atari veröffentlichte Pong wurde zum ersten weltweit beliebten Videospiel und in den 1970er Jahren zunächst auf Geräten in Spielhallen bekannt. Es gilt als Urvater der Videospiele, obgleich schon zuvor Videospiele entwickelt worden waren.
+>Pong wurde in den 70er Jahren entwickelt und ist das erste erfolgreiche Videospiel. Es ist ähnlich wie Tischtennis: jeder Spieler hat einen Balken(Schläger), den er hoch und runter bewegen kann. Zudem gibt es auch einen Ball, der sich bewegt und von den Rändern des Spielfelds reflektiert wird. Wenn der Ball an dem Balken eines Spielers vorbeigeht, bekommt der andere einen Punkt. 
+Im Frühjahr 1972 präsentierte die Firma Magnafox ihre von Ralph Baer entwickelte Magnafox Odyssey, die erste kommerzielle Spielkonsole. Bei dieser Präsentation spielte Nolan Bushnell zum ersten Mal dieses Ping-Pong Spiel. Als Bushnell wenig später Atari gründete, beauftragte er seinen noch neuen Angestellten Allan Allcon, zu Übungszwecken ein Ping-Pong-Spiel zu erstellen. Wie sich herausstellte, machte das Ping-Pong-Spiel so viel Spaß, dass Bushnell sich entschied, es zu veröffentlichen. Da der Begriff Ping Pong bereits geschützt war, einigte man sich darauf, das Spiel ganz einfach Pong zu nennen.
+Als Magnavox von Pong erfuhr, informierten sie Atari darüber, dass für das Spielprinzip bereits Patente bestanden. Vor Gericht konnte Magnavox beweisen, dass Bushnell im Frühjahr 1972 deren Ping-Pong-Spiel gesehen und gespielt hatte. Ein Eintrag Bushnells im Gästebuch von Magnavox untermauerte deren Beweisführung. Atari wurde zur Zahlung von $700.000 zur Nutzung der Patente von Magnavox verurteilt. Für Atari war das jedoch eine gute Investition, da man bis 1983 weit über 8000 Pong-Münzautomaten verkaufte.
+Heutzutage ist Pong nicht mehr so beliebt, da es sehr viel kompliziertere und spannendere Videospiele gibt, wobei es dennoch den Grundstein vieler Spiele gelegt hat.
+Fun Fact: die ursprüngliche Version ist erst ab 18, da es nie von der USK geprüft wurde. 1999 wurde dann jedoch eine neue Version veröffentlicht, die nicht ab 18 ist.  
+
 >
-> -- <cite>[Wikipedia](https://de.wikipedia.org/wiki/Pong)</cite>
+
 
 Das Spiel lässt sich zu zweit spielen und hat kein Ende. Die Tasten für Spieler A sind `W` und `S` und für Spieler B die Pfeiltasten.
 
