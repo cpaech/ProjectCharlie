@@ -60,6 +60,10 @@ public class Controller {
             model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
             model.ball.setY(model.tempBallPosition.y); 
         }
+        // adds speed when collision
+        if (model.ball.overlaps(model.paddleA, model.paddleB) {
+            model.ballVelocity.y *= +0.5f;
+        }
     }
 
     /**
