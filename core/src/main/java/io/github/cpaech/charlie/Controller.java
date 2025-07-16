@@ -116,7 +116,7 @@ public class Controller extends ChangeListener{
                 model.playerInfo = model.player2Name + ". This is a new Player with no highscore yet.";
             } 
             else {
-                model.playerInfo = model.player2Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
+                model.playerInfo = model.player2Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name);
             }
 
             menuView.errorLabel.setText("Player 2 logged in as: " + model.playerInfo);
