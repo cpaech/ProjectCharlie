@@ -35,43 +35,45 @@ public class Controller extends ChangeListener{
     * @param delta This is the time in seconds since the last call to this method
     */
     public void render(float delta) {
-        if (model.ball.x + model.ball.width < 0) { //check right side of ball against left wall of playingfield
-            model.scoreB++;
-            resetBall();
-        }
-        if (model.ball.x > model.screenWidth) { //check left side of ball against right wall of playingfield
-            model.scoreA++;
-            resetBall();
-        }
+        if (!model.homeMenuVisible) {
+            if (model.ball.x + model.ball.width < 0) { //check right side of ball against left wall of playingfield
+                model.scoreB++;
+                resetBall();
+            }
+            if (model.ball.x > model.screenWidth) { //check left side of ball against right wall of playingfield
+                model.scoreA++;
+                resetBall();
+            }
 
-        model.tempBallPosition.set(model.ball.x, model.ball.y); 
-        
-        model.ball.x += model.ballVelocity.x * delta;
-        model.ball.y += model.ballVelocity.y * delta;
+            model.tempBallPosition.set(model.ball.x, model.ball.y); 
+            
+            model.ball.x += model.ballVelocity.x * delta;
+            model.ball.y += model.ballVelocity.y * delta;
 
-        if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
-            model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
-            model.ballVelocity.x *= -1.0f; 
-        }
+            if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
+                model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
+                model.ballVelocity.x *= -1.0f; 
+            }
 
-        if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
-            model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
-            model.ballVelocity.x *= -1.0f;
-        }
-          
-        if (model.scoreA > AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name)) {
-                AppPreferences.getAppPreferences().setPlayerHighScore(model.player1Name, model.scoreA);
-        }
-        if (model.scoreB > AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name)) {
-                AppPreferences.getAppPreferences().setPlayerHighScore(model.player2Name, model.scoreB);
-        }
+            if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
+                model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
+                model.ballVelocity.x *= -1.0f;
+            }
+            
+            if (model.scoreA > AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name)) {
+                    AppPreferences.getAppPreferences().setPlayerHighScore(model.player1Name, model.scoreA);
+            }
+            if (model.scoreB > AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name)) {
+                    AppPreferences.getAppPreferences().setPlayerHighScore(model.player2Name, model.scoreB);
+            }
 
-        inputHandling(); //PaddleMovement and Collisioncheck
+            inputHandling(); //PaddleMovement and Collisioncheck
 
-        // Collision with top and bottom
-        if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
-            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
-            model.ball.setY(model.tempBallPosition.y); 
+            // Collision with top and bottom
+            if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
+                model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
+                model.ball.setY(model.tempBallPosition.y); 
+            }
         }
     }
 
