@@ -70,7 +70,8 @@ public class View {
         // wether to draw the home menu or game screen
         if (model.homeMenuVisible) {
             menuView.render(batch);
-        } else {
+        } 
+        else {
             batch.draw(paddleTexture, model.paddleB.x, model.paddleB.y, model.paddleB.width,
                     model.paddleB.height);
             batch.draw(paddleTexture, model.paddleA.x, model.paddleA.y, model.paddleA.width,

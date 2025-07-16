@@ -7,19 +7,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * This is the Controller. It updates the gameStates and values 
- * and is responsible for the game logic
+ * and is responsible for the game logic, as well as menu view logic.
  */
 public class Controller extends ChangeListener{
 
-    
+    /**
+     * Reference to the menu part of the view
+     */
     private MenuView menuView;
+    
     /**
      * Reference to the global model
      */
     private Model model;
    
     /**
-     * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller
+     * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller#modelwerteInitialisieren
      * @param model Reference to the global model
     */
     public Controller(Model model, MenuView menuView){
@@ -31,7 +34,7 @@ public class Controller extends ChangeListener{
     /**
     * Update the game state based on user input and other factors
     * For example, move paddles, update ball position, check for collisions, etc.
-    * This is where the game logic would go
+    * This is where the game logic would go. It skips running, when the home menu is displayed.
     * @param delta This is the time in seconds since the last call to this method
     */
     public void render(float delta) {
@@ -81,11 +84,13 @@ public class Controller extends ChangeListener{
      * This method gets called whenever something happens (eg. buttonclick) in the view (and through the view the menuView).
      */
     @Override
-    public void changed (ChangeEvent event, Actor actor) {
+    public void changed(ChangeEvent event, Actor actor) {
         System.out.println("Button Pressed: " + actor.getName());
 
         if(actor.getName().equals("StartGameButton")) {
-            if(model.player1Name == null || model.player2Name == null){menuView.errorLabel.setText("Please enter player Names first!");}
+            if(model.player1Name == null || model.player2Name == null) {
+                menuView.errorLabel.setText("Please enter player Names first!");
+            }
             else{
                 model.homeMenuVisible = false;
             }
@@ -93,34 +98,40 @@ public class Controller extends ChangeListener{
 
         if(actor.getName().equals("LoginPlayer1Button")) {
             model.player1Name = menuView.player1NameField.getText();
+
             if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name) == 0){
                 model.playerInfo = model.player1Name + ". This is a new Player with no highscore yet.";
-            } else {
+            } 
+            else {
                 model.playerInfo = model.player1Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
             }
+
             menuView.errorLabel.setText("Player 1 logged in as: " + model.playerInfo);
         }
 
         if(actor.getName().equals("LoginPlayer2Button")) {
             model.player2Name = menuView.player2NameField.getText();
-            if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name) == 0){
+
+            if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name) == 0) {
                 model.playerInfo = model.player2Name + ". This is a new Player with no highscore yet.";
-            } else {
+            } 
+            else {
                 model.playerInfo = model.player2Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
             }
+
             menuView.errorLabel.setText("Player 2 logged in as: " + model.playerInfo);
         }
     }
 
     /**
-     * This method disposes of any allocated ressources like textures of fonts
+     * This method disposes of any allocated ressources like textures of fonts. But there aren't any ;)
      */
     public void dispose() {
     }
 
     /**
      * This initializes values of the model
-     * For example paddle size or position
+     * For example paddle size or position. It also calls resetBall().
      */
     public void modelwerteInitialisieren() {
         model.paddleA.setSize(model.paddleWidth, model.paddleHeight);
@@ -138,7 +149,7 @@ public class Controller extends ChangeListener{
 
     /**
      * This resets the Ball to the middle of the screen
-     * and assigns it a random velocity
+     * and assigns it a random velocity. The last collided paddle is set to 0/none.
      */
     private void resetBall() {
         model.lastCollidedPaddle = 0;

@@ -1,6 +1,5 @@
 package io.github.cpaech.charlie;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,59 +15,75 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 /**
  * This is the part of the view structure which takes care of rendering 
- * the menu with scoreboard and everything. From here the player will be able to start a game.
+ * the menu with scoreboard and everything. From here the player will be able to start a game and login.
  */
 public class MenuView {
 
-    Model model;
-    Controller controller;
+    /**
+     * Reference to the global Model
+     */
+    private Model model;
+
+    /**
+     * Reference to the global Controller. Used for handling input of the textfields or buttons.
+     */
+    private Controller controller;
 
     /**
      * This is the container for all ui elements. Required by libgdx.
      */
     private Stage stage;
+
+    //I won't do a Javadoc for each and everyone of them ;(
+    private TextButton loginPlayer1Button;
+    private TextButton loginPlayer2Button;
+
+    private TextField player1NameField;
+    private TextField player2NameField;
+
+    private TextButton startGameButton;
+
+    private Label errorLabel;
+
     /**
-     * Example of a button with text.
+     * as a background for the textfield
      */
-    TextButton loginPlayer1Button;
-    TextButton loginPlayer2Button;
-
-    TextField player1NameField;
-    TextField player2NameField;
-
-    TextButton startGameButton;
-
-    Label errorLabel;
-
-    Pixmap pixmap; // as a background for the textfield
+    Pixmap pixmap;
+    
     /**
      * Style of the button and textfield(font, color, image, etc...).
      */
     TextButtonStyle textButtonStyle;
-    TextField.TextFieldStyle textFieldStyle;
+
     /**
-     * The Font used for all UI-elements.
+     * Style of the button and textfield(font, color, image, etc...).
+     */
+    TextField.TextFieldStyle textFieldStyle;
+
+    /**
+     * The Default font used for all UI-elements.
      */
     BitmapFont font;
+
     /**
      * This is a button skin, containing all the images of each state for the button.
      */
     Skin skin;
+
     /**
      * Textureatlas containing all the imagery for the button graphics.
      */
     TextureAtlas buttonAtlas;
+
     /**
      * This method sets up all nesessary objects for the UI.
      * @param mvcModel Model passed by {@link Main}
      * @param mvcController Controller passed by {@link Main}, responsible for input processing.
      */
-    public MenuView(Model model)
-    {
+    public MenuView(Model model) {
         this.model = model;
 
         stage = new Stage();
@@ -107,6 +122,16 @@ public class MenuView {
         stage.addActor(errorLabel);
     }
 
+    /**
+     * Create a new textfield, assign it a text, dimensions and adds it to the stage.
+     * @param newField Handle to the TextField variable, which will hold the new TextField
+     * @param name Name of the actor in the stage
+     * @param messageText Text, to be displayed
+     * @param x x-coordinate of the lower bottom corner of the label
+     * @param y y-coordinate of the lower bottom corner of the label
+     * @param width Width of the textfield
+     * @param height Height of the textfield
+     */
     public TextField newTextField(TextField newField, String name, String messageText, float x, float y, float width, float height)
     {
         newField = new TextField("", textFieldStyle);
@@ -117,6 +142,16 @@ public class MenuView {
         return newField;
     }
 
+    /**
+     * Create a new TextButton, assign it a text, dimensions and adds it to the stage.
+     * @param newButton Handle to the TextButton variable, which will hold the new TextButton
+     * @param name Name of the actor in the stage
+     * @param messageText Text, to be displayed
+     * @param x x-coordinate of the lower bottom corner of the label
+     * @param y y-coordinate of the lower bottom corner of the label
+     * @param width Width of the TextButton
+     * @param height Height of the TextButton
+     */
     public TextButton newTextButton(TextButton newButton, String name, String text, float x, float y, float width, float height)
     {
         newButton = new TextButton(text, textButtonStyle);
@@ -126,6 +161,9 @@ public class MenuView {
         return newButton;
     }
 
+    /**
+     * Assigns the MenuView the current Controller and sets up all Listeners.
+     */
     public void setController(Controller mvcController) {  //used in view to manage circular dependency between MenuView and Controller.
         this.controller = mvcController;
         startGameButton.addListener(mvcController);
@@ -143,6 +181,7 @@ public class MenuView {
     {
         stage.draw();
     }
+    
     /**
      * Clear all memory and cleanup
      */
