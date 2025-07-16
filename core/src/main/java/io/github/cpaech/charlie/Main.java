@@ -25,8 +25,9 @@ public class Main extends ApplicationAdapter {
         loadPreferences();
         // Initializes the model, view, and controller
         model = new Model();
-        view = new View(model);
-        controller = new Controller(model);
+        view = new View(model); // Temporarily pass null for the controller
+        controller = new Controller(model, view.menuView);
+        view.setController(controller);
     }
 
     private void loadPreferences() {    

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 
 public class AppPreferences {
     public static final String PREFS_NAME = "PreferencesForProjectCharlie";
+
     private static AppPreferences appPreferences = null;
 
     public static AppPreferences getAppPreferences() {

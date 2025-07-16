@@ -2,13 +2,17 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * This is the Controller. It updates the gameStates and values 
  * and is responsible for the game logic
  */
-public class Controller {
+public class Controller extends ChangeListener{
 
+    
+    private MenuView menuView;
     /**
      * Reference to the global model
      */
@@ -18,7 +22,8 @@ public class Controller {
      * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller
      * @param model Reference to the global model
     */
-    public Controller(Model model) {
+    public Controller(Model model, MenuView menuView){
+        this.menuView = menuView;
         this.model = model;
         modelwerteInitialisieren();
     }
@@ -70,6 +75,41 @@ public class Controller {
         }
     }
 
+     /**
+     * This method gets called whenever something happens (eg. buttonclick) in the view (and through the view the menuView).
+     */
+    @Override
+    public void changed (ChangeEvent event, Actor actor) {
+        System.out.println("Button Pressed: " + actor.getName());
+
+        if(actor.getName().equals("StartGameButton")) {
+            if(model.player1Name == null || model.player2Name == null){menuView.errorLabel.setText("Please enter player Names first!");}
+            else{
+                model.homeMenuVisible = false;
+            }
+        }
+
+        if(actor.getName().equals("LoginPlayer1Button")) {
+            model.player1Name = menuView.player1NameField.getText();
+            if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name) == 0){
+                model.playerInfo = model.player1Name + ". This is a new Player with no highscore yet.";
+            } else {
+                model.playerInfo = model.player1Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
+            }
+            menuView.errorLabel.setText("Player 1 logged in as: " + model.playerInfo);
+        }
+
+        if(actor.getName().equals("LoginPlayer2Button")) {
+            model.player2Name = menuView.player2NameField.getText();
+            if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name) == 0){
+                model.playerInfo = model.player2Name + ". This is a new Player with no highscore yet.";
+            } else {
+                model.playerInfo = model.player2Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
+            }
+            menuView.errorLabel.setText("Player 2 logged in as: " + model.playerInfo);
+        }
+    }
+
     /**
      * This method disposes of any allocated ressources like textures of fonts
      */
@@ -108,7 +148,14 @@ public class Controller {
      * This moves the paddles up or down, based on userinput
      */
     public void inputHandling()
-    {
+    {   
+        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)){
+            model.homeMenuVisible = true;
+            menuView.player1NameField.setText("");
+            menuView.player2NameField.setText("");
+            menuView.errorLabel.setText("");
+        }
+
         boolean isPressedW = Gdx.input.isKeyPressed(Keys.W);
         boolean isPressedS = Gdx.input.isKeyPressed(Keys.S);
         boolean isPressedUp = Gdx.input.isKeyPressed(Keys.UP);
