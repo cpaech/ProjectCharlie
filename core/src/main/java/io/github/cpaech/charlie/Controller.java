@@ -47,10 +47,37 @@ public class Controller {
         if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
             model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
             model.ballVelocity.x *= -1.0f; 
+            model.ball.x = model.paddleA.x + model.paddleA.width; // Ball vor das Paddle setzen (verhindert Verklemmung)
+            // Berechne vertikalen Aufprall-Offset (von -1 bis +1)
+            float ballCenterY = model.ball.y + model.ball.height / 2f;
+            float paddleCenterY = model.paddleA.y + model.paddleA.height / 2f;
+            float distance = ballCenterY - paddleCenterY; // berechnet die Distanz vom Ball zum Mittelpunkt des Paddles
+            float Offset = distance / (model.paddleA.height / 2f); // Distanz vom Paddle-Zentrum (zwischen -1 und +1)
+
+            // Paddle-Bewegung berechnen
+            float paddleSpeedY = 0;
+            if (Gdx.input.isKeyPressed(Keys.W)) paddleSpeedY -= model.paddleSpeed;
+            if (Gdx.input.isKeyPressed(Keys.S)) paddleSpeedY += model.paddleSpeed;
+
+            // Ball vertikal beschleunigen
+            model.ballVelocity.y += Offset * 300 + paddleSpeedY * 0.3f; // ergibt wie stark der Ball je nach Treffpunkt abgelenkt wird
         }
+        
         if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
             model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
             model.ballVelocity.x *= -1.0f; 
+            model.ball.x = model.paddleB.x - model.ball.width; // Ball vor das Paddle setzen (verhindert Verklemmung)
+
+            float ballCenterY = model.ball.y + model.ball.height / 2f;
+            float paddleCenterY = model.paddleB.y + model.paddleB.height / 2f;
+            float distance = ballCenterY - paddleCenterY; // berechnet die Distanz vom Ball zum Mittelpunkt des Paddles
+            float Offset = distance / (model.paddleB.height / 2f); // Distanz vom Paddle-Zentrum (zwischen -1 und +1)
+
+            float paddleSpeedY = 0;
+            if (Gdx.input.isKeyPressed(Keys.UP)) paddleSpeedY -= model.paddleSpeed;
+            if (Gdx.input.isKeyPressed(Keys.DOWN)) paddleSpeedY += model.paddleSpeed;
+
+            model.ballVelocity.y += Offset * 300 + paddleSpeedY * 0.3f; // ergibt wie stark der Ball je nach Treffpunkt abgelenkt wird
         }
 
         inputHandling(); //PaddleMovement and Collisioncheck
@@ -59,10 +86,6 @@ public class Controller {
         if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
             model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
             model.ball.setY(model.tempBallPosition.y); 
-        }
-        // adds speed when collision
-        if (model.ball.overlaps(model.paddleA, model.paddleB) {
-            model.ballVelocity.y *= +0.5f;
         }
     }
 
