@@ -102,6 +102,7 @@ public class Model {
      * This tells the Model, View and MenuView if the menu or game should be visible.
      */
     public boolean homeMenuVisible = true;
-
-    public String player1Info; // temporary storage used in the menu to display player info
+    public String playerInfo; // temporary storage used in the menu to display player info
+    public String player1Name; // Name of player 1, used for login and display in the menu
+    public String player2Name; // Name of player 2, used for login and display
 }

@@ -12,21 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-//TODO https://libgdx.com/wiki/graphics/2d/scene2d/scene2d-ui
-
 /**
  * This is the part of the view structure which takes care of rendering 
  * the menu with scoreboard and everything. From here the player will be able to start a game.
  */
 public class MenuView {
-    /**
-     * Shared model
-     */
-    private Model mvcModel;
-    /**
-     * Shared controller. Responsible for processing the input from UI-elements.
-     */
-    private Controller mvcController;
+
     /**
      * This is the container for all ui elements. Required by libgdx.
      */
@@ -34,11 +25,14 @@ public class MenuView {
     /**
      * Example of a button with text.
      */
-    TextButton loginButton;
+    TextButton loginPlayer1Button;
+    TextButton loginPlayer2Button;
 
     TextButton startGameButton;
 
-    TextField usernameField;
+    TextField player1NameField;
+    TextField player2NameField;
+
 
     TextField errorField;
     /**
@@ -59,15 +53,16 @@ public class MenuView {
      * Textureatlas containing all the imagery for the button graphics.
      */
     TextureAtlas buttonAtlas;
-    
+    Model model;
+    Controller controller;
     /**
      * This method sets up all nesessary objects for the UI.
      * @param mvcModel Model passed by {@link Main}
      * @param mvcController Controller passed by {@link Main}, responsible for input processing.
      */
-    public MenuView(Model mvcModel)
+    public MenuView(Model model)
     {
-        this.mvcModel = mvcModel;
+        this.model = model;
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -87,9 +82,12 @@ public class MenuView {
         textFieldStyle.font = font;
         textFieldStyle.fontColor = Color.RED;
 
-        loginButton = newTextButton(loginButton, "LoginButton", "Login", 200, 200, 120, 50);        startGameButton = newTextButton(startGameButton, "StartGameButton", "Start Game", 400, 200, 120, 50);
-        usernameField = newTextField(usernameField, "usernameField", "Enter Username", 200, 300, 120, 50);
+        loginPlayer1Button = newTextButton(loginPlayer1Button, "LoginPlayer1Button", "Login Player 1", 200, 200, 120, 50);
+        player1NameField = newTextField(player1NameField, "player1NameField", "Enter Player 1 Name", 200, 300, 120, 50);
+        loginPlayer2Button = newTextButton(loginPlayer2Button, "LoginPlayer2Button", "Login Player 2", 400, 200, 135, 50);
+        player2NameField = newTextField(player2NameField, "player2NameField", "Enter Player 2 Name", 400, 300, 135, 50);
         errorField = newTextField(errorField, null, null, 200, 0, 600, 50);
+        startGameButton = newTextButton(startGameButton, "StartGameButton", "Start Game", 300, 100, 120, 50);
     }
 
     public TextField newTextField(TextField newField, String name, String messageText, float x, float y, float width, float height)
@@ -99,8 +97,6 @@ public class MenuView {
         newField.setBounds(x, y, width, height);
         newField.setName(name);
         stage.addActor(newField);
-        if(name == "serverPortTextField"){newField.setText(String.valueOf(AppPreferences.getAppPreferences().getServerPort()));}
-        if(name == "serverHostTextField"){newField.setText(AppPreferences.getAppPreferences().getServerHost());}
         return newField;
     }
 
@@ -114,10 +110,12 @@ public class MenuView {
     }
 
     public void setController(Controller mvcController) {  //used in view to manage circular dependency between MenuView and Controller.
-        this.mvcController = mvcController;
+        this.controller = mvcController;
         startGameButton.addListener(mvcController);
-        usernameField.addListener(mvcController);
-        loginButton.addListener(mvcController);
+        player1NameField.addListener(mvcController);
+        loginPlayer1Button.addListener(mvcController);
+        player2NameField.addListener(mvcController);
+        loginPlayer2Button.addListener(mvcController);
     }
 
     /**
