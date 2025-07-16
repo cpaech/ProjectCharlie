@@ -66,6 +66,16 @@ public class MenuView {
     Skin skin;
 
     /**
+     * This is the texture for the Pong Logo
+     */
+    Texture pongTitle;
+
+    /**
+     * This is the texture for the Pong Menu Background
+     */
+    Texture pongBackground;
+
+    /**
      * Textureatlas containing all the imagery for the button graphics.
      */
     TextureAtlas buttonAtlas;
@@ -78,6 +88,9 @@ public class MenuView {
     public MenuView(Model model) {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+
+        pongTitle = new Texture(Gdx.files.internal("PongTitle.png"));
+        pongBackground = new Texture(Gdx.files.internal("PongBackground.png"));
 
         font = new BitmapFont();
         skin = new Skin();
@@ -173,6 +186,8 @@ public class MenuView {
     public void render(SpriteBatch batch)
     {
         stage.draw();
+        batch.draw(pongTitle, 400 - 143, 440);
+        batch.draw(pongBackground, 0, 0);
     }
 
     /**
@@ -184,6 +199,7 @@ public class MenuView {
         skin.dispose();
         buttonAtlas.dispose();
         pixmap.dispose();
+        pongTitle.dispose();
     }
 
 }

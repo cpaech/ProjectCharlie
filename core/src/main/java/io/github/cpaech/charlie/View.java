@@ -19,6 +19,11 @@ public class View {
      * Texture allocated for the paddles
      */
     private final Texture paddleTexture;
+
+    /**
+     * Texture for the background of the actual game.
+     */
+    private final Texture pongBackground2;
     
     /**
      * Texture allocated for the ball
@@ -48,6 +53,7 @@ public class View {
         this.model = model;
         menuView = new MenuView(model);
 
+        pongBackground2 = new Texture("PongBackground2.png");
         batch = new SpriteBatch(); 
         paddleTexture = new Texture("libgdx.png");
         ballTexture = new Texture("ball.png");
@@ -72,6 +78,7 @@ public class View {
             menuView.render(batch);
         } 
         else {
+            batch.draw(pongBackground2, 0, 0);
             batch.draw(paddleTexture, model.paddleB.x, model.paddleB.y, model.paddleB.width,
                     model.paddleB.height);
             batch.draw(paddleTexture, model.paddleA.x, model.paddleA.y, model.paddleA.width,
@@ -82,6 +89,7 @@ public class View {
             font.draw(batch,"" + model.player2Name, model.screenWidth - model.player2Name.length()*9 - 10, model.screenHeight - 20);
             font.draw(batch, "Highscore: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name), model.screenWidth - 90, model.screenHeight - 40);
             batch.draw(ballTexture, model.ball.x, model.ball.y, model.ball.width, model.ball.height);
+       
         }
         // end drawing
         batch.end();
