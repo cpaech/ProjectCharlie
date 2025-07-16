@@ -53,9 +53,17 @@ public class Controller extends ChangeListener{
             model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
             model.ballVelocity.x *= -1.0f; 
         }
+
         if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
             model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
-            model.ballVelocity.x *= -1.0f; 
+            model.ballVelocity.x *= -1.0f;
+        }
+          
+        if (model.scoreA > AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name)) {
+                AppPreferences.getAppPreferences().setPlayerHighScore(model.player1Name, model.scoreA);
+        }
+        if (model.scoreB > AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name)) {
+                AppPreferences.getAppPreferences().setPlayerHighScore(model.player2Name, model.scoreB);
         }
 
         inputHandling(); //PaddleMovement and Collisioncheck
