@@ -98,4 +98,10 @@ public class Model {
     */
     public int ballSize = 20;
     
+    /**
+     * This tells the Model, View and MenuView if the menu or game should be visible.
+     */
+    public boolean homeMenuVisible = true;
+
+    public String player1Info; // temporary storage used in the menu to display player info
 }

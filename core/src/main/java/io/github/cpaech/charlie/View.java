@@ -34,19 +34,29 @@ public class View {
      * Reference to the model. This reference is used to fetch values needed in order to draw
      * graphics to the screen.
      */
-    private Model model; 
+    private Model model;  
+    Controller mvcController;
+
+    MenuView menuView;
 
     /**
-     * This loads and allocates all required graphical ressources.
      * @param model Reference to the model by Main
+     * @param mvcController Controller passed by {@link Main}
      */
+
     public View(Model model) {
         this.model = model;
+        menuView = new MenuView(model);
 
         batch = new SpriteBatch(); 
         paddleTexture = new Texture("libgdx.png");
         ballTexture = new Texture("ball.png");
         font = new BitmapFont();
+    }
+
+    public void setController(Controller mvcController) {
+        this.mvcController = mvcController;
+        menuView.setController(mvcController);
     }
     
     /**
@@ -62,7 +72,8 @@ public class View {
         batch.draw(ballTexture, model.ball.x, model.ball.y, model.ball.width, model.ball.height);
 
         font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight-40);
-      
+        font.draw(batch, "Highscore: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name), 10, 540);
+
         batch.end();
     }
 

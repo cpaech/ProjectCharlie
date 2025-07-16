@@ -2,13 +2,16 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * This is the Controller. It updates the gameStates and values 
  * and is responsible for the game logic
  */
-public class Controller {
+public class Controller extends ChangeListener{
 
+    private MenuView menuView;
     /**
      * Reference to the global model
      */
@@ -18,7 +21,8 @@ public class Controller {
      * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller
      * @param model Reference to the global model
     */
-    public Controller(Model model) {
+    public Controller(Model model, MenuView menuView){
+        this.menuView = menuView;
         this.model = model;
         modelwerteInitialisieren();
     }
@@ -59,6 +63,39 @@ public class Controller {
         if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
             model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
             model.ball.setY(model.tempBallPosition.y); 
+        }
+    }
+
+     /**
+     * This method gets called whenever something happens (eg. buttonclick) in the view.
+     */
+
+    @Override
+    public void changed (ChangeEvent event, Actor actor) {
+        System.out.println("Button Pressed: " + actor.getName());
+
+        if(actor.getName().equals("StartGameButton")) {
+            if(model.player1Name == null){menuView.errorField.setText("Please enter a name first!");}
+            else{
+                model.homeMenuVisible = false;
+            }
+        }
+        if(actor.getName().equals("SoloPlayButton")) {
+            if(model.player1Name == null){menuView.errorField.setText("Please enter a name first!");}
+            else{
+                model.homeMenuVisible = false;
+            }
+        }
+        if(actor.getName().equals("LoginButton")) {
+            model.player1Name = menuView.usernameField.getText();
+            menuView.errorField.setText("Logged in as: " + model.player1Name);
+            System.out.println("Player name set to: " + model.player1Name);
+            if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name) == 0){
+                model.player1Info = model.player1Name + ". This is a new Player with no highscore yet.";
+            } else {
+                model.player1Info = model.player1Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
+            }
+            menuView.errorField.setText("Logged in as: " + model.player1Info);
         }
     }
 

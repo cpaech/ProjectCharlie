@@ -23,8 +23,9 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         model = new Model();
-        view = new View(model);
-        controller = new Controller(model);
+        view = new View(model); // Temporarily pass null for the controller
+        controller = new Controller(model, view.menuView);
+        view.setController(controller);
     }
 
     /**
