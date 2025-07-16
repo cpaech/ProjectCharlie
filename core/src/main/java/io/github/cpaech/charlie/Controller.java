@@ -2,7 +2,6 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
@@ -88,8 +87,6 @@ public class Controller extends ChangeListener{
     public void changed(ChangeEvent event, Actor actor) {
         System.out.println("Button Pressed: " + actor.getName());
 
-        if (!model.homeMenuVisible) {return;}
-
         if(actor.getName().equals("StartGameButton")) {
             if(model.player1Name == null || model.player2Name == null) {
                 menuView.errorLabel.setText("Please enter player Names first!");
@@ -99,23 +96,9 @@ public class Controller extends ChangeListener{
             }
         }
 
-        if(actor.getName().equals("Bot1LoginButton")) {
-            model.player1Name = "Computer 1";
-            model.playerABot = true;
-            menuView.errorLabel.setText("Player 1 is controlled by the computer");
-        }
-
-        if(actor.getName().equals("Bot2LoginButton")) {
-            model.player2Name = "Computer 2";
-            model.playerBBot = true;
-            menuView.errorLabel.setText("Player 2 is controlled by the computer");
-        }
-
         if(actor.getName().equals("LoginPlayer1Button")) {
-            
-            model.playerABot = false;
             model.player1Name = menuView.player1NameField.getText();
-            
+
             if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name) == 0){
                 model.playerInfo = model.player1Name + ". This is a new Player with no highscore yet.";
             } 
@@ -127,10 +110,8 @@ public class Controller extends ChangeListener{
         }
 
         if(actor.getName().equals("LoginPlayer2Button")) {
-            
-            model.playerBBot = false;
             model.player2Name = menuView.player2NameField.getText();
-            
+
             if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name) == 0) {
                 model.playerInfo = model.player2Name + ". This is a new Player with no highscore yet.";
             } 
@@ -187,34 +168,11 @@ public class Controller extends ChangeListener{
             menuView.player2NameField.setText("");
             menuView.errorLabel.setText("");
         }
-        
+
         boolean isPressedW = Gdx.input.isKeyPressed(Keys.W);
         boolean isPressedS = Gdx.input.isKeyPressed(Keys.S);
         boolean isPressedUp = Gdx.input.isKeyPressed(Keys.UP);
         boolean isPressedDown = Gdx.input.isKeyPressed(Keys.DOWN);
-        
-        if(model.playerABot)
-        {
-            if(model.paddleA.getCenter(new Vector2()).y > model.ball.getCenter(new Vector2()).y) {
-                isPressedW = false;
-                isPressedS = true;
-            }
-            else {
-                isPressedW = true;
-                isPressedS = false;
-            }
-        }
-        if(model.playerBBot)
-        {
-            if(model.paddleB.getCenter(new Vector2()).y > model.ball.getCenter(new Vector2()).y) {
-                isPressedUp = false;
-                isPressedDown = true;
-            }
-            else {
-                isPressedUp = true;
-                isPressedDown = false;
-            }
-        }
         
         model.paddleA.y += (isPressedW ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime();
         model.paddleA.y -= (isPressedS ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); 

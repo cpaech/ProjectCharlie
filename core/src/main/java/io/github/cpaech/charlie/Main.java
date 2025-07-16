@@ -40,6 +40,7 @@ public class Main extends ApplicationAdapter {
     * It calls the Controller with the deltaTime and afterwards calls the view for a render
     * Overrides the method layed out by {@link com.badlogic.gdx.ApplicationListener#render()}.
     **/
+
     @Override
     public void render() {
         controller.render(Gdx.graphics.getDeltaTime());

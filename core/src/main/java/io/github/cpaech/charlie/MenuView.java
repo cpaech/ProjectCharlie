@@ -21,6 +21,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
  * the menu with scoreboard and everything. From here the player will be able to start a game and login.
  */
 public class MenuView {
+
+    /**
+     * Reference to the global Model
+     */
+    private Model model;
+
+    /**
+     * Reference to the global Controller. Used for handling input of the textfields or buttons.
+     */
+    private Controller controller;
+
     /**
      * This is the container for all ui elements. Required by libgdx.
      */
@@ -29,9 +40,6 @@ public class MenuView {
     //I won't do a Javadoc for each and everyone of them ;(
     public TextButton loginPlayer1Button;
     public TextButton loginPlayer2Button;
-
-    public TextButton bot1loginButton;
-    public TextButton bot2loginButton;
 
     public TextField player1NameField;
     public TextField player2NameField;
@@ -76,6 +84,8 @@ public class MenuView {
      * @param mvcController Controller passed by {@link Main}, responsible for input processing.
      */
     public MenuView(Model model) {
+        this.model = model;
+
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -104,10 +114,8 @@ public class MenuView {
 
         loginPlayer1Button = newTextButton(loginPlayer1Button, "LoginPlayer1Button", "Login Player 1", 200, 200, 135, 50);
         player1NameField = newTextField(player1NameField, "player1NameField", "Enter Player 1 Name", 200, 300, 135, 50);
-        bot1loginButton = newTextButton(bot1loginButton, "Bot1LoginButton", "Computer Login", 200, 250, 135, 50);
         loginPlayer2Button = newTextButton(loginPlayer2Button, "LoginPlayer2Button", "Login Player 2", 400, 200, 135, 50);
         player2NameField = newTextField(player2NameField, "player2NameField", "Enter Player 2 Name", 400, 300, 135, 50);
-        bot2loginButton = newTextButton(bot1loginButton, "Bot2LoginButton", "Computer Login", 400, 250, 135, 50);
         startGameButton = newTextButton(startGameButton, "StartGameButton", "Start Game", 300, 100, 120, 50);
         errorLabel = new Label("", labelStyle);
         errorLabel.setBounds(200, 0, 600, 50);
@@ -157,13 +165,12 @@ public class MenuView {
      * Assigns the MenuView the current Controller and sets up all Listeners.
      */
     public void setController(Controller mvcController) {  //used in view to manage circular dependency between MenuView and Controller.
+        this.controller = mvcController;
         startGameButton.addListener(mvcController);
         player1NameField.addListener(mvcController);
         loginPlayer1Button.addListener(mvcController);
         player2NameField.addListener(mvcController);
         loginPlayer2Button.addListener(mvcController);
-        bot1loginButton.addListener(mvcController);
-        bot2loginButton.addListener(mvcController);
     }
 
     /**
