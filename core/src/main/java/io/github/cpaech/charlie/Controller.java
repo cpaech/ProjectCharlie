@@ -52,6 +52,7 @@ public class Controller {
         if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
             model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
             model.ballVelocity.x *= -1.0f;
+        }
           
         if (model.scoreA > AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name)) {
                 AppPreferences.getAppPreferences().setPlayerHighScore(model.player1Name, model.scoreA);
