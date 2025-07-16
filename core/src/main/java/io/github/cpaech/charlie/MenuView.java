@@ -3,20 +3,29 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 /**
  * This is the part of the view structure which takes care of rendering 
  * the menu with scoreboard and everything. From here the player will be able to start a game.
  */
 public class MenuView {
+
+    Model model;
+    Controller controller;
 
     /**
      * This is the container for all ui elements. Required by libgdx.
@@ -28,18 +37,18 @@ public class MenuView {
     TextButton loginPlayer1Button;
     TextButton loginPlayer2Button;
 
-    TextButton startGameButton;
-
     TextField player1NameField;
     TextField player2NameField;
 
+    TextButton startGameButton;
 
-    TextField errorField;
+    Label errorLabel;
+
+    Pixmap pixmap; // as a background for the textfield
     /**
-     * Style of the button (font, color, image, etc...).
+     * Style of the button and textfield(font, color, image, etc...).
      */
     TextButtonStyle textButtonStyle;
-
     TextField.TextFieldStyle textFieldStyle;
     /**
      * The Font used for all UI-elements.
@@ -53,8 +62,6 @@ public class MenuView {
      * Textureatlas containing all the imagery for the button graphics.
      */
     TextureAtlas buttonAtlas;
-    Model model;
-    Controller controller;
     /**
      * This method sets up all nesessary objects for the UI.
      * @param mvcModel Model passed by {@link Main}
@@ -81,13 +88,23 @@ public class MenuView {
         textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = font;
         textFieldStyle.fontColor = Color.RED;
+        Pixmap pixmap = new Pixmap(200, 50, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.GRAY);
+        pixmap.fill();
+        textFieldStyle.background = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+    
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.RED;
 
-        loginPlayer1Button = newTextButton(loginPlayer1Button, "LoginPlayer1Button", "Login Player 1", 200, 200, 120, 50);
-        player1NameField = newTextField(player1NameField, "player1NameField", "Enter Player 1 Name", 200, 300, 120, 50);
+        loginPlayer1Button = newTextButton(loginPlayer1Button, "LoginPlayer1Button", "Login Player 1", 200, 200, 135, 50);
+        player1NameField = newTextField(player1NameField, "player1NameField", "Enter Player 1 Name", 200, 300, 135, 50);
         loginPlayer2Button = newTextButton(loginPlayer2Button, "LoginPlayer2Button", "Login Player 2", 400, 200, 135, 50);
         player2NameField = newTextField(player2NameField, "player2NameField", "Enter Player 2 Name", 400, 300, 135, 50);
-        errorField = newTextField(errorField, null, null, 200, 0, 600, 50);
         startGameButton = newTextButton(startGameButton, "StartGameButton", "Start Game", 300, 100, 120, 50);
+        errorLabel = new Label("", labelStyle);
+        errorLabel.setBounds(200, 0, 600, 50);
+        stage.addActor(errorLabel);
     }
 
     public TextField newTextField(TextField newField, String name, String messageText, float x, float y, float width, float height)
@@ -134,6 +151,7 @@ public class MenuView {
         stage.dispose();
         skin.dispose();
         buttonAtlas.dispose();
+        pixmap.dispose();
     }
 
 }

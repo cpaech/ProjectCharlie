@@ -75,7 +75,7 @@ public class Controller extends ChangeListener{
         System.out.println("Button Pressed: " + actor.getName());
 
         if(actor.getName().equals("StartGameButton")) {
-            if(model.player1Name == null || model.player2Name == null){menuView.errorField.setText("Please enter player Names first!");}
+            if(model.player1Name == null || model.player2Name == null){menuView.errorLabel.setText("Please enter player Names first!");}
             else{
                 model.homeMenuVisible = false;
             }
@@ -88,7 +88,7 @@ public class Controller extends ChangeListener{
             } else {
                 model.playerInfo = model.player1Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
             }
-            menuView.errorField.setText("Player 1 logged in as: " + model.playerInfo);
+            menuView.errorLabel.setText("Player 1 logged in as: " + model.playerInfo);
         }
 
         if(actor.getName().equals("LoginPlayer2Button")) {
@@ -98,7 +98,7 @@ public class Controller extends ChangeListener{
             } else {
                 model.playerInfo = model.player2Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
             }
-            menuView.errorField.setText("Player 2 logged in as: " + model.playerInfo);
+            menuView.errorLabel.setText("Player 2 logged in as: " + model.playerInfo);
         }
     }
 
@@ -145,7 +145,7 @@ public class Controller extends ChangeListener{
             model.homeMenuVisible = true;
             menuView.player1NameField.setText("");
             menuView.player2NameField.setText("");
-            menuView.errorField.setText("");
+            menuView.errorLabel.setText("");
         }
 
         boolean isPressedW = Gdx.input.isKeyPressed(Keys.W);
