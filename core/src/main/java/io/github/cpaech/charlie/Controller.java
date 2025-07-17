@@ -172,9 +172,20 @@ public class Controller extends ChangeListener{
      * and assigns it a random velocity. The last collided paddle is set to 0/none.
      */
     private void resetBall() {
+        model.ballVelocity.set(0, 0);
+        model.ball.setPosition(model.screenWidth / 2, model.screenHeight / 2);
         model.lastCollidedPaddle = 0;
-        model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);
-        model.ballVelocity.set(model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed, model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed);
+
+        com.badlogic.gdx.utils.Timer.schedule(                     // Schedule the ball reset after 1 second
+            new com.badlogic.gdx.utils.Timer.Task() {
+                @Override
+                public void run() {
+                    model.ballVelocity.set(                        // Reset the ball's position and velocity
+                        model.initialBallSpeed + (float) Math.random() * model.randomBallSpeed,
+                        model.initialBallSpeed + (float) Math.random() * model.randomBallSpeed
+                    );
+                }
+            }, 0.8f);                                  // Delay of 0.8 seconds
     }
 
     /**
