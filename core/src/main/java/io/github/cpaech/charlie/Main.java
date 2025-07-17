@@ -22,10 +22,18 @@ public class Main extends ApplicationAdapter {
     **/
     @Override
     public void create() {
+        loadPreferences();
+        // Initializes the model, view, and controller
         model = new Model();
-        view = new View(model);
-        controller = new Controller(model);
+        view = new View(model); // Temporarily pass null for the controller
+        controller = new Controller(model, view.menuView);
+        view.setController(controller);
     }
+
+    private void loadPreferences() {    
+        AppPreferences.getAppPreferences();
+    }
+
 
     /**
     * This method is called every frame and is the main part of the update loop

@@ -1,0 +1,26 @@
+numbers.png
+size: 32, 620
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+0
+  bounds: 1, 1, 30, 60
+1
+  bounds: 1, 63, 30, 60
+2
+  bounds: 1, 125, 30, 60
+3
+  bounds: 1, 187, 30, 60
+4
+  bounds: 1, 249, 30, 60
+5
+  bounds: 1, 311, 30, 60
+6
+  bounds: 1, 373, 30, 60
+7
+  bounds: 1, 435, 30, 60
+8
+  bounds: 1, 497, 30, 60
+9
+  bounds: 1, 559, 30, 60
