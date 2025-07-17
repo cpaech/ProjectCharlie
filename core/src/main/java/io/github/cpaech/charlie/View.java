@@ -1,14 +1,23 @@
 package io.github.cpaech.charlie;
 
+import java.lang.reflect.Array;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
  * The View is the part responsible for drawing all sorts of graphics to the screen.
  */
 public class View {
+
+    /**
+     * TextureAtlas containing numbers to display the score.
+     */
+    private TextureAtlas numbersAtlas;
 
     /**
      * SpriteBatch is used to draw our Geometry on the screen (e.g. paddles, balls, etc.)
@@ -42,6 +51,11 @@ public class View {
     private Model model;  
     Controller mvcController;
 
+    /**
+     * libgdx Array containing all the numbers from the numbersAtlas as sprites.
+     */
+    private com.badlogic.gdx.utils.Array<Sprite> numberSprites;
+
     MenuView menuView;
 
     /**
@@ -52,6 +66,9 @@ public class View {
     public View(Model model) {
         this.model = model;
         menuView = new MenuView(model);
+        
+        numbersAtlas = new TextureAtlas("numbers.txt");
+        numberSprites = numbersAtlas.createSprites();
 
         pongBackground2 = new Texture("PongBackground2.png");
         batch = new SpriteBatch(); 
@@ -83,13 +100,18 @@ public class View {
                     model.paddleB.height);
             batch.draw(paddleTexture, model.paddleA.x, model.paddleA.y, model.paddleA.width,
                     model.paddleA.height);
-            font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight - 20);
+            //font.draw(batch, model.scoreA + " : " + model.scoreB, model.screenWidth/2, model.screenHeight - 20);
             font.draw(batch,"" + model.player1Name, 10, model.screenHeight - 40);
             font.draw(batch, "Highscore: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name), 10, 540);
             font.draw(batch,"" + model.player2Name, model.screenWidth - model.player2Name.length()*9 - 10, model.screenHeight - 20);
             font.draw(batch, "Highscore: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name), model.screenWidth - 90, model.screenHeight - 40);
             batch.draw(ballTexture, model.ball.x, model.ball.y, model.ball.width, model.ball.height);
-       
+            batch.draw(numberSprites.get(Math.min((model.scoreA - (model.scoreA % 10)) / 10, 9)), 165, 530);
+            batch.draw(numberSprites.get(model.scoreA % 10), 200, 530);
+            
+            batch.draw(numberSprites.get(Math.min((model.scoreB - (model.scoreB % 10)) / 10, 9)), 565, 530);
+            batch.draw(numberSprites.get(model.scoreB % 10), 600, 530);
+
         }
         // end drawing
         batch.end();
@@ -102,6 +124,7 @@ public class View {
         paddleTexture.dispose();
         ballTexture.dispose();
         batch.dispose();
+        numbersAtlas.dispose();
     }
     
 }

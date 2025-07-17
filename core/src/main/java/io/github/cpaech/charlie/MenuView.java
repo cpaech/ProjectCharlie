@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
@@ -40,6 +41,8 @@ public class MenuView {
 
     public Label errorLabel;
 
+    Table table;
+    
     /**
      * as a background for the textfield
      */
@@ -89,6 +92,12 @@ public class MenuView {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
+        table = new Table();
+        table.setFillParent(true);
+        table.bottom();
+        table.pad(100);
+        stage.addActor(table);
+
         pongTitle = new Texture(Gdx.files.internal("PongTitle.png"));
         pongBackground = new Texture(Gdx.files.internal("PongBackground.png"));
 
@@ -115,16 +124,34 @@ public class MenuView {
         labelStyle.font = font;
         labelStyle.fontColor = Color.RED;
 
-        loginPlayer1Button = newTextButton(loginPlayer1Button, "LoginPlayer1Button", "Login Player 1", 200, 200, 135, 50);
         player1NameField = newTextField(player1NameField, "player1NameField", "Enter Player 1 Name", 200, 300, 135, 50);
-        bot1loginButton = newTextButton(bot1loginButton, "Bot1LoginButton", "Computer Login", 200, 250, 135, 50);
-        loginPlayer2Button = newTextButton(loginPlayer2Button, "LoginPlayer2Button", "Login Player 2", 400, 200, 135, 50);
+        table.add(player1NameField).space(30).right();
         player2NameField = newTextField(player2NameField, "player2NameField", "Enter Player 2 Name", 400, 300, 135, 50);
+        table.add(player2NameField).space(30).left();
+
+        table.row();
+
+        loginPlayer1Button = newTextButton(loginPlayer1Button, "LoginPlayer1Button", "Login Player 1", 200, 200, 135, 50);
+        table.add(loginPlayer1Button).space(30).right();
+        loginPlayer2Button = newTextButton(loginPlayer2Button, "LoginPlayer2Button", "Login Player 2", 400, 200, 135, 50);
+        table.add(loginPlayer2Button).space(30).left();
+
+        table.row();
+
+        bot1loginButton = newTextButton(bot1loginButton, "Bot1LoginButton", "Computer Login", 200, 250, 135, 50);
+        table.add(bot1loginButton).space(30).right();
         bot2loginButton = newTextButton(bot1loginButton, "Bot2LoginButton", "Computer Login", 400, 250, 135, 50);
+        table.add(bot2loginButton).space(30).left();
+        
+        table.row();
+
         startGameButton = newTextButton(startGameButton, "StartGameButton", "Start Game", 300, 100, 120, 50);
+        table.add(startGameButton).space(30).center().colspan(2);
+
+        table.row();
+
         errorLabel = new Label("", labelStyle);
-        errorLabel.setBounds(200, 0, 600, 50);
-        stage.addActor(errorLabel);
+        table.add(errorLabel).expandX().colspan(2).center();
     }
 
     /**
@@ -143,7 +170,6 @@ public class MenuView {
         newField.setMessageText(messageText);
         newField.setBounds(x, y, width, height);
         newField.setName(name);
-        stage.addActor(newField);
         return newField;
     }
 
@@ -162,7 +188,6 @@ public class MenuView {
         newButton = new TextButton(text, textButtonStyle);
         newButton.setBounds(x, y, width, height);
         newButton.setName(name);
-        stage.addActor(newButton);
         return newButton;
     }
 
