@@ -196,7 +196,7 @@ public class Controller extends ChangeListener{
             xSpeed = (float) Math.cos(arc * Math.PI / 180);
         }
 
-        model.ballVelocity.set(xSpeed * model.initialBallSpeed, (float) (Math.sin(arc * Math.PI / 180) * model.initialBallSpeed));
+        model.ballVelocity.set(xSpeed * model.BallSpeed, (float) (Math.sin(arc * Math.PI / 180) * model.BallSpeed));
         System.out.println("Initial ball speed: " + model.ballVelocity);
     }
 
