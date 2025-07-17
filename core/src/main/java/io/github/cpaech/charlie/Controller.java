@@ -185,8 +185,11 @@ public class Controller extends ChangeListener{
             }, 0.8f);                                  // Delay of 0.8 seconds
     }
 
-    public void setRandomBallSpeed() {                              //this generates a random angle (between 45 degreees up and down on both sides) for the ball
-        int arc = (int) (Math.random() * 90 - 45);
+    public void setRandomBallSpeed() {                              //this generates a random angle (between 20 and 55 degreees up and down on both sides) for the ball
+        int arc = 0;
+        while(Math.pow(arc, 2) < Math.pow(20, 2)){
+            arc = (int) (Math.random() * 110 - 55);
+        }
         System.out.println("Initial arc: " + arc);
 
         float xSpeed = 0;
