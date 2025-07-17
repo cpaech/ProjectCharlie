@@ -1,14 +1,14 @@
 package io.github.cpaech.charlie;
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+
 
 public class MenuViewTest {
     private MenuView menuView;
