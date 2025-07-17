@@ -187,6 +187,9 @@ public class Controller extends ChangeListener{
             }, 0.8f);                                  // Delay of 0.8 seconds
     }
 
+    /**
+     * Generates a random direction and launches the ball in that direction.
+     */
     public void setRandomBallSpeed() {                              //this generates a random angle (between 45 degreees up and down on both sides) for the ball
         int arc = (int)(Math.random() * 40 + 30);
         System.out.println("Initial arc: " + arc);
