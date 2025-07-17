@@ -78,6 +78,16 @@ public class Controller extends ChangeListener{
                 model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
                 model.ball.setY(model.tempBallPosition.y); 
             }
+          
+            // Berechne vertikalen Aufprall-Offset (von -1 bis +1)
+            float ballCenterY = model.ball.y + model.ball.height / 2f;
+            float paddleCenterY = model.paddleA.y + model.paddleA.height / 2f;
+            float distance = ballCenterY - paddleCenterY; // berechnet die Distanz vom Ball zum Mittelpunkt des Paddles
+            float Offset = distance / (model.paddleA.height / 2f); // Distanz vom Paddle-Zentrum (zwischen -1 und +1)
+      
+            // Ball vertikal beschleunigen
+            model.ballVelocity.y += Offset * 300 + paddleSpeedY * 0.3f; // ergibt wie stark der Ball je nach Treffpunkt abgelenkt wird
+      
         }
     }
 
@@ -99,13 +109,13 @@ public class Controller extends ChangeListener{
                 resetBall();
             }
         }
-
+  
         if(actor.getName().equals("Bot1LoginButton")) {
             model.player1Name = "Computer 1";
             model.playerABot = true;
             menuView.errorLabel.setText("Player 1 is controlled by the computer");
         }
-
+  
         if(actor.getName().equals("Bot2LoginButton")) {
             model.player2Name = "Computer 2";
             model.playerBBot = true;
@@ -125,6 +135,7 @@ public class Controller extends ChangeListener{
             }
 
             menuView.errorLabel.setText("Player 1 logged in as: " + model.playerInfo);
+          
         }
 
         if(actor.getName().equals("LoginPlayer2Button")) {
