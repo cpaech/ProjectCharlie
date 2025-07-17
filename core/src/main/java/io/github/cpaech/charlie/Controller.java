@@ -2,23 +2,32 @@ package io.github.cpaech.charlie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * This is the Controller. It updates the gameStates and values 
- * and is responsible for the game logic
+ * and is responsible for the game logic, as well as menu view logic.
  */
-public class Controller {
+public class Controller extends ChangeListener{
 
+    /**
+     * Reference to the menu part of the view
+     */
+    private MenuView menuView;
+    
     /**
      * Reference to the global model
      */
     private Model model;
    
     /**
-     * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller
+     * Initilizes the Controller and calls @see io.github.cpaech.charlie.Controller#modelwerteInitialisieren
      * @param model Reference to the global model
     */
-    public Controller(Model model) {
+    public Controller(Model model, MenuView menuView){
+        this.menuView = menuView;
         this.model = model;
         modelwerteInitialisieren();
     }
@@ -26,78 +35,134 @@ public class Controller {
     /**
     * Update the game state based on user input and other factors
     * For example, move paddles, update ball position, check for collisions, etc.
-    * This is where the game logic would go
+    * This is where the game logic would go. It skips running, when the home menu is displayed.
     * @param delta This is the time in seconds since the last call to this method
     */
     public void render(float delta) {
-        if (model.ball.x + model.ball.width < 0) { //check right side of ball against left wall of playingfield
-            model.scoreB++;
-            resetBall();
-        }
-        if (model.ball.x > model.screenWidth) { //check left side of ball against right wall of playingfield
-            model.scoreA++;
-            resetBall();
-        }
+        if (!model.homeMenuVisible) {
+            if (model.ball.x + model.ball.width < 0) { //check right side of ball against left wall of playingfield
+                model.scoreB++;
+                resetBall();
+            }
+            if (model.ball.x > model.screenWidth) { //check left side of ball against right wall of playingfield
+                model.scoreA++;
+                resetBall();
+            }
 
-        model.tempBallPosition.set(model.ball.x, model.ball.y); 
-        
-        model.ball.x += model.ballVelocity.x * delta;
-        model.ball.y += model.ballVelocity.y * delta;
+            model.tempBallPosition.set(model.ball.x, model.ball.y); 
+            
+            model.ball.x += model.ballVelocity.x * delta;
+            model.ball.y += model.ballVelocity.y * delta;
 
-        if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
-            model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
-            model.ballVelocity.x *= -1.0f; 
-            model.ball.x = model.paddleA.x + model.paddleA.width; // Ball vor das Paddle setzen (verhindert Verklemmung)
+            if (model.ball.overlaps(model.paddleA) && (model.lastCollidedPaddle == 2 || model.lastCollidedPaddle == 0)) { 
+                model.lastCollidedPaddle = 1; // Paddle A ist now lastCollidedPaddle
+                model.ballVelocity.x *= -1.0f; 
+            }
+
+            if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
+                model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
+                model.ballVelocity.x *= -1.0f;
+            }
+            
+            if (model.scoreA > AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name)) {
+                    AppPreferences.getAppPreferences().setPlayerHighScore(model.player1Name, model.scoreA);
+            }
+            if (model.scoreB > AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name)) {
+                    AppPreferences.getAppPreferences().setPlayerHighScore(model.player2Name, model.scoreB);
+            }
+
+            inputHandling(); //PaddleMovement and Collisioncheck
+
+            // Collision with top and bottom
+            if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
+                model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
+                model.ball.setY(model.tempBallPosition.y); 
+            }
+          
             // Berechne vertikalen Aufprall-Offset (von -1 bis +1)
             float ballCenterY = model.ball.y + model.ball.height / 2f;
             float paddleCenterY = model.paddleA.y + model.paddleA.height / 2f;
             float distance = ballCenterY - paddleCenterY; // berechnet die Distanz vom Ball zum Mittelpunkt des Paddles
             float Offset = distance / (model.paddleA.height / 2f); // Distanz vom Paddle-Zentrum (zwischen -1 und +1)
-
-            // Paddle-Bewegung berechnen
-            float paddleSpeedY = 0;
-            if (Gdx.input.isKeyPressed(Keys.W)) paddleSpeedY -= model.paddleSpeed;
-            if (Gdx.input.isKeyPressed(Keys.S)) paddleSpeedY += model.paddleSpeed;
-
+      
             // Ball vertikal beschleunigen
             model.ballVelocity.y += Offset * 300 + paddleSpeedY * 0.3f; // ergibt wie stark der Ball je nach Treffpunkt abgelenkt wird
+      
         }
-        
-        if (model.ball.overlaps(model.paddleB) && (model.lastCollidedPaddle == 1 || model.lastCollidedPaddle == 0)) { 
-            model.lastCollidedPaddle = 2; // Paddle B is now the lastCollidedPaddle
-            model.ballVelocity.x *= -1.0f; 
-            model.ball.x = model.paddleB.x - model.ball.width; // Ball vor das Paddle setzen (verhindert Verklemmung)
+    }
 
-            float ballCenterY = model.ball.y + model.ball.height / 2f;
-            float paddleCenterY = model.paddleB.y + model.paddleB.height / 2f;
-            float distance = ballCenterY - paddleCenterY; // berechnet die Distanz vom Ball zum Mittelpunkt des Paddles
-            float Offset = distance / (model.paddleB.height / 2f); // Distanz vom Paddle-Zentrum (zwischen -1 und +1)
+     /**
+     * This method gets called whenever something happens (eg. buttonclick) in the view (and through the view the menuView).
+     */
+    @Override
+    public void changed(ChangeEvent event, Actor actor) {
+        System.out.println("Button Pressed: " + actor.getName());
 
-            float paddleSpeedY = 0;
-            if (Gdx.input.isKeyPressed(Keys.UP)) paddleSpeedY -= model.paddleSpeed;
-            if (Gdx.input.isKeyPressed(Keys.DOWN)) paddleSpeedY += model.paddleSpeed;
+        if (!model.homeMenuVisible) {return;}
 
-            model.ballVelocity.y += Offset * 300 + paddleSpeedY * 0.3f; // ergibt wie stark der Ball je nach Treffpunkt abgelenkt wird
+        if(actor.getName().equals("StartGameButton")) {
+            if(model.player1Name == null || model.player2Name == null) {
+                menuView.errorLabel.setText("Please enter player Names first!");
+            }
+            else{
+                model.homeMenuVisible = false;
+                resetBall();
+            }
+        }
+  
+        if(actor.getName().equals("Bot1LoginButton")) {
+            model.player1Name = "Computer 1";
+            model.playerABot = true;
+            menuView.errorLabel.setText("Player 1 is controlled by the computer");
+        }
+  
+        if(actor.getName().equals("Bot2LoginButton")) {
+            model.player2Name = "Computer 2";
+            model.playerBBot = true;
+            menuView.errorLabel.setText("Player 2 is controlled by the computer");
         }
 
-        inputHandling(); //PaddleMovement and Collisioncheck
+        if(actor.getName().equals("LoginPlayer1Button")) {
+            
+            model.playerABot = false;
+            model.player1Name = menuView.player1NameField.getText();
+            
+            if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name) == 0){
+                model.playerInfo = model.player1Name + ". This is a new Player with no highscore yet.";
+            } 
+            else {
+                model.playerInfo = model.player1Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player1Name);
+            }
 
-        // Collision with top and bottom
-        if (model.ball.y <= 0 || model.ball.y + model.ball.height >= model.screenHeight) {
-            model.ballVelocity.y *= -1.0f; // y-Richtung umkehren
-            model.ball.setY(model.tempBallPosition.y); 
+            menuView.errorLabel.setText("Player 1 logged in as: " + model.playerInfo);
+          
+        }
+
+        if(actor.getName().equals("LoginPlayer2Button")) {
+            
+            model.playerBBot = false;
+            model.player2Name = menuView.player2NameField.getText();
+            
+            if(AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name) == 0) {
+                model.playerInfo = model.player2Name + ". This is a new Player with no highscore yet.";
+            } 
+            else {
+                model.playerInfo = model.player2Name + ". Your current highscore is: " + AppPreferences.getAppPreferences().getPlayerHighScore(model.player2Name);
+            }
+
+            menuView.errorLabel.setText("Player 2 logged in as: " + model.playerInfo);
         }
     }
 
     /**
-     * This method disposes of any allocated ressources like textures of fonts
+     * This method disposes of any allocated ressources like textures of fonts. But there aren't any ;)
      */
     public void dispose() {
     }
 
     /**
      * This initializes values of the model
-     * For example paddle size or position
+     * For example paddle size or position. It also calls resetBall().
      */
     public void modelwerteInitialisieren() {
         model.paddleA.setSize(model.paddleWidth, model.paddleHeight);
@@ -115,7 +180,7 @@ public class Controller {
 
     /**
      * This resets the Ball to the middle of the screen
-     * and assigns it a random velocity
+     * and assigns it a random velocity. The last collided paddle is set to 0/none.
      */
     private void resetBall() {
         model.lastCollidedPaddle = 0;
@@ -127,11 +192,41 @@ public class Controller {
      * This moves the paddles up or down, based on userinput
      */
     public void inputHandling()
-    {
+    {   
+        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)){
+            model.homeMenuVisible = true;
+            menuView.player1NameField.setText("");
+            menuView.player2NameField.setText("");
+            menuView.errorLabel.setText("");
+        }
+        
         boolean isPressedW = Gdx.input.isKeyPressed(Keys.W);
         boolean isPressedS = Gdx.input.isKeyPressed(Keys.S);
         boolean isPressedUp = Gdx.input.isKeyPressed(Keys.UP);
         boolean isPressedDown = Gdx.input.isKeyPressed(Keys.DOWN);
+        
+        if(model.playerABot)
+        {
+            if(model.paddleA.getCenter(new Vector2()).y > model.ball.getCenter(new Vector2()).y) {
+                isPressedW = false;
+                isPressedS = true;
+            }
+            else {
+                isPressedW = true;
+                isPressedS = false;
+            }
+        }
+        if(model.playerBBot)
+        {
+            if(model.paddleB.getCenter(new Vector2()).y > model.ball.getCenter(new Vector2()).y) {
+                isPressedUp = false;
+                isPressedDown = true;
+            }
+            else {
+                isPressedUp = true;
+                isPressedDown = false;
+            }
+        }
         
         model.paddleA.y += (isPressedW ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime();
         model.paddleA.y -= (isPressedS ? 1 : 0) * model.paddleSpeed * Gdx.graphics.getDeltaTime(); 
