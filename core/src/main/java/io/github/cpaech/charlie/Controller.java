@@ -97,6 +97,8 @@ public class Controller extends ChangeListener{
             else{
                 model.homeMenuVisible = false;
                 resetBall();
+                model.scoreA = 0;
+                model.scoreB = 0;
             }
         }
 
