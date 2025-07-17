@@ -175,7 +175,7 @@ public class Controller extends ChangeListener{
      */
     private void resetBall() {
         model.ballVelocity.set(0, 0);
-        model.ball.setPosition(model.screenWidth / 2, model.screenHeight / 2);
+        model.ball.setPosition(model.screenWidth / 2.0f - model.ball.width / 2.0f, model.screenHeight / 2.0f - model.ball.height / 2.0f);
         model.lastCollidedPaddle = 0;
 
         com.badlogic.gdx.utils.Timer.schedule(                     // Schedule the ball reset after 1 second
