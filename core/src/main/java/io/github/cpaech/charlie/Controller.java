@@ -179,13 +179,25 @@ public class Controller extends ChangeListener{
         com.badlogic.gdx.utils.Timer.schedule(                     // Schedule the ball reset after 1 second
             new com.badlogic.gdx.utils.Timer.Task() {
                 @Override
-                public void run() {
-                    model.ballVelocity.set(                        // Reset the ball's position and velocity
-                        model.initialBallSpeed + (float) Math.random() * model.randomBallSpeed,
-                        model.initialBallSpeed + (float) Math.random() * model.randomBallSpeed
-                    );
+                public void run() {                                // Reset the ball's position and velocity
+                        setRandomBallSpeed();
                 }
             }, 0.8f);                                  // Delay of 0.8 seconds
+    }
+
+    public void setRandomBallSpeed() {                              //this generates a random angle (between 45 degreees up and down on both sides) for the ball
+        int arc = (int) (Math.random() * 90 - 45);
+        System.out.println("Initial arc: " + arc);
+
+        float xSpeed = 0;
+        if (Math.abs(arc) % 2 == 0) {
+            xSpeed = -(float) Math.cos(arc * Math.PI / 180);
+        } else {
+            xSpeed = (float) Math.cos(arc * Math.PI / 180);
+        }
+
+        model.ballVelocity.set(xSpeed * model.initialBallSpeed, (float) (Math.sin(arc * Math.PI / 180) * model.initialBallSpeed));
+        System.out.println("Initial ball speed: " + model.ballVelocity);
     }
 
     /**
