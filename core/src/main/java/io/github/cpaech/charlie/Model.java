@@ -84,14 +84,9 @@ public class Model {
     public int paddleSpeed = 300;
 
     /**
-    * Initial base speed of the ball
+    * Base speed of the ball
     */
-    public float initialBallSpeed = 300.0f;
-
-    /**
-    * Maximum random speed added to the base speed of the ball
-    */
-    public float randomBallSpeed = 100.0f;
+    public float BallSpeed = 500.0f;
 
     /**
     * Squaresize of the Ball in px

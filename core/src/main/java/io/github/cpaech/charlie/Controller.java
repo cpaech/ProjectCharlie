@@ -97,6 +97,8 @@ public class Controller extends ChangeListener{
             else{
                 model.homeMenuVisible = false;
                 resetBall();
+                model.scoreA = 0;
+                model.scoreB = 0;
             }
         }
 
@@ -172,9 +174,48 @@ public class Controller extends ChangeListener{
      * and assigns it a random velocity. The last collided paddle is set to 0/none.
      */
     private void resetBall() {
+        model.ballVelocity.set(0, 0);
+        model.ball.setPosition(model.screenWidth / 2.0f - model.ball.width / 2.0f, model.screenHeight / 2.0f - model.ball.height / 2.0f);
         model.lastCollidedPaddle = 0;
-        model.ball.setPosition(model.screenWidth/2, model.screenHeight/2);
-        model.ballVelocity.set(model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed, model.initialBallSpeed + (float)Math.random() * model.randomBallSpeed);
+
+        com.badlogic.gdx.utils.Timer.schedule(                     // Schedule the ball reset after 1 second
+            new com.badlogic.gdx.utils.Timer.Task() {
+                @Override
+                public void run() {                                // Reset the ball's position and velocity
+                        setRandomBallSpeed();
+                }
+            }, 0.8f);                                  // Delay of 0.8 seconds
+    }
+
+    /**
+     * Generates a random direction and launches the ball.
+     */
+    public void setRandomBallSpeed() {                              //this generates a random angle (between 45 degreees up and down on both sides) for the ball
+        int arc = (int)(Math.random() * 40 + 30);
+        System.out.println("Initial arc: " + arc);
+        
+        float xSpeed = 0;
+        float ySpeed = 0;
+        //upper radiant
+        if (Math.random() > 0.5f) {
+            if (Math.abs(arc) % 2 == 0) { //right
+                xSpeed = (float) Math.cos((arc) * Math.PI / 180);
+                ySpeed = (float) Math.sin(arc * Math.PI / 180);
+            } else { //left
+                xSpeed = (float) Math.cos((180 - arc) * Math.PI / 180);
+                ySpeed = (float) Math.sin((180 - arc) * Math.PI / 180);
+            }
+        } else { //lower radiant
+            if (Math.abs(arc) % 2 == 0) { //right
+                xSpeed = (float) Math.cos((360 - arc) * Math.PI / 180);
+                ySpeed = (float) Math.sin((360 - arc) * Math.PI / 180);
+            } else {
+                xSpeed = (float) Math.cos((180 + arc) * Math.PI / 180);
+                ySpeed = (float) Math.sin((180 + arc) * Math.PI / 180);
+            }
+        }
+        model.ballVelocity.set(xSpeed * model.BallSpeed, ySpeed * model.BallSpeed);
+        System.out.println("Initial ball speed: " + model.ballVelocity);
     }
 
     /**
